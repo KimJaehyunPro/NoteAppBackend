@@ -2,6 +2,8 @@ package com.example.accessingdatamysql.user;
 
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping(path="/user")
 public class UserController {
@@ -18,11 +20,10 @@ public class UserController {
             AddNewUserRequestDTO addNewUserRequestDTO) {
 
         return userService.createNewUser(addNewUserRequestDTO.getUsername(), addNewUserRequestDTO.getEmail());
-
     }
 
     @GetMapping(path="/all")
-    public @ResponseBody Iterable<User> getAllUsers() {
+    public List<GetAllUserResponseDTO> getAllUsers() {
         return userService.getAllUsers();
     }
 }
