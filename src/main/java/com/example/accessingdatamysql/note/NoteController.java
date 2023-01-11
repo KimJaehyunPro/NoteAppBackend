@@ -7,6 +7,7 @@ import com.example.accessingdatamysql.note.DTO.AddNewNoteResponseDTO;
 import com.example.accessingdatamysql.note.DTO.GetAllNoteResponseDTO;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/note")
@@ -19,12 +20,11 @@ public class NoteController {
     }
 
     @GetMapping("/{noteId}")
-    public String ViewNote(
+    public Optional<Note> ViewNote(
             @PathVariable
             Integer noteId
     ) {
-
-        return noteService.viewNote();
+        return noteService.viewNote(noteId);
     }
 
     @GetMapping("/all")

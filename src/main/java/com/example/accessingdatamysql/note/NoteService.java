@@ -2,10 +2,12 @@ package com.example.accessingdatamysql.note;
 import com.example.accessingdatamysql.note.DTO.AddNewNoteResponseDTO;
 import com.example.accessingdatamysql.note.DTO.GetAllNoteResponseDTO;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class NoteService {
@@ -16,8 +18,12 @@ public class NoteService {
         this.noteRepository = noteRepository;
     }
 
-    public String viewNote() {
-        return "test successful!";
+    public Optional<Note> viewNote(
+            @RequestParam
+            Integer id
+    ) {
+        Optional<Note> note = noteRepository.findById(id);
+        return note;
     }
 
     public AddNewNoteResponseDTO addNewNote(
