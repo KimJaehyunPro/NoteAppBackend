@@ -1,20 +1,22 @@
-package com.example.accessingdatamysql.note;
+package com.example.accessingdatamysql.note.DTO;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.example.accessingdatamysql.user.DTO.AddNewUserResponseDTO;
 
-@Entity
-public class Note {
+public class AddNewNoteResponseDTO {
 
-    @Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
     private Integer id;
-
     private String title;
-
     private String content;
+
+    public AddNewNoteResponseDTO(
+            Integer id,
+            String title,
+            String content
+    ) {
+        this.id = id;
+        this.title = title;
+        this.content = content;
+    }
 
     public Integer getId() {
         return id;

@@ -1,4 +1,4 @@
-package com.example.accessingdatamysql.user;
+package com.example.accessingdatamysql.user.DTO;
 
 public class GetAllUserResponseDTO {
 

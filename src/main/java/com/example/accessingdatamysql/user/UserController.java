@@ -1,5 +1,8 @@
 package com.example.accessingdatamysql.user;
 
+import com.example.accessingdatamysql.user.DTO.AddNewUserRequestDTO;
+import com.example.accessingdatamysql.user.DTO.AddNewUserResponseDTO;
+import com.example.accessingdatamysql.user.DTO.GetAllUserResponseDTO;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

@@ -1,22 +1,13 @@
-package com.example.accessingdatamysql.user;
+package com.example.accessingdatamysql.user.DTO;
 
-public class AddNewUserResponseDTO {
-    private Integer id;
+public class AddNewUserRequestDTO {
+
     private String username;
     private String email;
 
-    public AddNewUserResponseDTO(Integer id, String username, String email) {
-        this.id = id;
+    public AddNewUserRequestDTO(String username, String email) {
         this.username = username;
         this.email = email;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
     }
 
     public String getUsername() {
