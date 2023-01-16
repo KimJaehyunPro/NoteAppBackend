@@ -6,10 +6,14 @@ import com.example.accessingdatamysql.note.DTO.AddNewNoteRequestDTO;
 import com.example.accessingdatamysql.note.DTO.AddNewNoteResponseDTO;
 import com.example.accessingdatamysql.note.DTO.GetAllNoteResponseDTO;
 
+import com.example.accessingdatamysql.note.DTO.EditNoteRequestDTO;
+import com.example.accessingdatamysql.note.DTO.EditNoteResponseDTO;
+
 import java.util.List;
 import java.util.Optional;
 
 @RestController
+@CrossOrigin(origins = "*")
 @RequestMapping("/note")
 public class NoteController {
 
@@ -38,5 +42,21 @@ public class NoteController {
             AddNewNoteRequestDTO addNewNoteRequestDTO
     ) {
         return noteService.addNewNote(addNewNoteRequestDTO.getTitle(), addNewNoteRequestDTO.getContent());
+    }
+
+    @PostMapping("/edit")
+    public EditNoteResponseDTO editNote(
+            @RequestBody
+            EditNoteRequestDTO editNoteRequestDTO
+    ) {
+        return noteService.editNote(editNoteRequestDTO);
+    }
+
+    @PostMapping("/delete")
+    public String deleteNote(
+            @RequestBody
+            Integer noteId
+    ) {
+        return noteService.DeleteNote(noteId);
     }
 }

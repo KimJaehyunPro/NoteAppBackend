@@ -1,7 +1,10 @@
 package com.example.accessingdatamysql.note;
 import com.example.accessingdatamysql.note.DTO.AddNewNoteResponseDTO;
+import com.example.accessingdatamysql.note.DTO.EditNoteRequestDTO;
+import com.example.accessingdatamysql.note.DTO.EditNoteResponseDTO;
 import com.example.accessingdatamysql.note.DTO.GetAllNoteResponseDTO;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.ArrayList;
@@ -51,5 +54,34 @@ public class NoteService {
         }
 
         return allNotesResponse;
+    }
+
+    public EditNoteResponseDTO editNote(
+            @RequestBody
+            EditNoteRequestDTO editNoteRequestDTO
+    ) {
+        Integer noteId = editNoteRequestDTO.getNoteId();
+
+        Optional<Note> optional = noteRepository.findById(noteId);
+        if (optional.isEmpty()) { return null; };
+
+        Note originalNote = optional.get();
+        originalNote.setTitle(editNoteRequestDTO.getTitle());
+        originalNote.setContent(editNoteRequestDTO.getContent());
+        Note editedNote = noteRepository.save(originalNote);
+
+        EditNoteResponseDTO editNoteResponseDTO = new EditNoteResponseDTO(
+                editedNote.getId(), editedNote.getTitle(), editedNote.getContent()
+        );
+
+        return editNoteResponseDTO;
+    }
+
+    public String DeleteNote(
+            @RequestBody
+            Integer noteId
+    ) {
+        noteRepository.deleteById(noteId);
+        return "Deleted!";
     }
 }

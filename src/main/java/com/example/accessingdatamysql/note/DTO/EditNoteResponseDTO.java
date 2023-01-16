@@ -1,12 +1,12 @@
 package com.example.accessingdatamysql.note.DTO;
 
-public class AddNewNoteResponseDTO {
+public class EditNoteResponseDTO {
 
     private Integer noteId;
     private String title;
     private String content;
 
-    public AddNewNoteResponseDTO(
+    public EditNoteResponseDTO(
             Integer noteId,
             String title,
             String content
