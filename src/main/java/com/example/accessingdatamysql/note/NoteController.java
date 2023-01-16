@@ -1,13 +1,7 @@
 package com.example.accessingdatamysql.note;
 
+import com.example.accessingdatamysql.note.DTO.*;
 import org.springframework.web.bind.annotation.*;
-
-import com.example.accessingdatamysql.note.DTO.AddNewNoteRequestDTO;
-import com.example.accessingdatamysql.note.DTO.AddNewNoteResponseDTO;
-import com.example.accessingdatamysql.note.DTO.GetAllNoteResponseDTO;
-
-import com.example.accessingdatamysql.note.DTO.EditNoteRequestDTO;
-import com.example.accessingdatamysql.note.DTO.EditNoteResponseDTO;
 
 import java.util.List;
 import java.util.Optional;
@@ -44,6 +38,14 @@ public class NoteController {
         return noteService.addNewNote(addNewNoteRequestDTO.getTitle(), addNewNoteRequestDTO.getContent());
     }
 
+    @PostMapping("/delete")
+    public DeleteNoteResponseDTO deleteNote(
+            @RequestBody
+            DeleteNoteRequestDTO deleteNoteRequestDTO
+    ) {
+        return noteService.deleteNote(deleteNoteRequestDTO);
+    }
+
     @PostMapping("/edit")
     public EditNoteResponseDTO editNote(
             @RequestBody
@@ -52,11 +54,5 @@ public class NoteController {
         return noteService.editNote(editNoteRequestDTO);
     }
 
-    @PostMapping("/delete")
-    public String deleteNote(
-            @RequestBody
-            Integer noteId
-    ) {
-        return noteService.DeleteNote(noteId);
-    }
+
 }

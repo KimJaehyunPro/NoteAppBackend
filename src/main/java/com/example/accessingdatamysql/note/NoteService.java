@@ -1,14 +1,11 @@
 package com.example.accessingdatamysql.note;
-import com.example.accessingdatamysql.note.DTO.AddNewNoteResponseDTO;
-import com.example.accessingdatamysql.note.DTO.EditNoteRequestDTO;
-import com.example.accessingdatamysql.note.DTO.EditNoteResponseDTO;
-import com.example.accessingdatamysql.note.DTO.GetAllNoteResponseDTO;
+
+import com.example.accessingdatamysql.note.DTO.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,7 +19,6 @@ public class NoteService {
     }
 
     public Optional<Note> viewNote(
-            @RequestParam
             Integer id
     ) {
         Optional<Note> note = noteRepository.findById(id);
@@ -57,13 +53,15 @@ public class NoteService {
     }
 
     public EditNoteResponseDTO editNote(
-            @RequestBody
             EditNoteRequestDTO editNoteRequestDTO
     ) {
         Integer noteId = editNoteRequestDTO.getNoteId();
 
         Optional<Note> optional = noteRepository.findById(noteId);
-        if (optional.isEmpty()) { return null; };
+        if (optional.isEmpty()) {
+            return null;
+        }
+        ;
 
         Note originalNote = optional.get();
         originalNote.setTitle(editNoteRequestDTO.getTitle());
@@ -77,11 +75,12 @@ public class NoteService {
         return editNoteResponseDTO;
     }
 
-    public String DeleteNote(
-            @RequestBody
-            Integer noteId
+    public DeleteNoteResponseDTO deleteNote(
+            DeleteNoteRequestDTO deleteNoteRequestDTO
     ) {
+        Integer noteId = deleteNoteRequestDTO.getNoteId();
         noteRepository.deleteById(noteId);
-        return "Deleted!";
+        DeleteNoteResponseDTO deleteNoteResponseDTO = new DeleteNoteResponseDTO(noteId);
+        return deleteNoteResponseDTO;
     }
 }
