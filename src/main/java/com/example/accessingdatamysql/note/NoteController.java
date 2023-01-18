@@ -30,12 +30,12 @@ public class NoteController {
         return noteService.getAllNotes();
     }
 
-    @PostMapping("/add")
-    public AddNewNoteResponseDTO addNewNote(
+    @PostMapping("/create")
+    public CreateNoteResponseDTO createNote(
             @RequestBody
-            AddNewNoteRequestDTO addNewNoteRequestDTO
+            CreateNoteRequestDTO createNoteRequestDTO
     ) {
-        return noteService.addNewNote(addNewNoteRequestDTO.getTitle(), addNewNoteRequestDTO.getContent());
+        return noteService.createNote(createNoteRequestDTO.getTitle(), createNoteRequestDTO.getContent());
     }
 
     @PostMapping("/delete")
@@ -46,13 +46,16 @@ public class NoteController {
         return noteService.deleteNote(deleteNoteRequestDTO);
     }
 
-    @PostMapping("/edit")
-    public EditNoteResponseDTO editNote(
+    @PostMapping("/update")
+    public UpdateNoteResponseDTO updateNote(
             @RequestBody
-            EditNoteRequestDTO editNoteRequestDTO
+            UpdateNoteRequestDTO updateNoteRequestDTO
     ) {
-        return noteService.editNote(editNoteRequestDTO);
+        return noteService.updateNote(updateNoteRequestDTO);
     }
 
-
+    @GetMapping("/randomNoteId")
+    public RandomNoteIdResponseDTO getRandomNoteId() {
+        return noteService.getRandomNoteId();
+    }
 }

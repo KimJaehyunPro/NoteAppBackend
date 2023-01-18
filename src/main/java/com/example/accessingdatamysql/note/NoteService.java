@@ -2,12 +2,11 @@ package com.example.accessingdatamysql.note;
 
 import com.example.accessingdatamysql.note.DTO.*;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 
 @Service
 public class NoteService {
@@ -25,7 +24,7 @@ public class NoteService {
         return note;
     }
 
-    public AddNewNoteResponseDTO addNewNote(
+    public CreateNoteResponseDTO createNote(
             String title,
             String content
     ) {
@@ -35,8 +34,8 @@ public class NoteService {
         newNote.setContent(content);
         noteRepository.save(newNote);
 
-        AddNewNoteResponseDTO addNewNoteResponseDTO = new AddNewNoteResponseDTO(newNote.getId(), title, content);
-        return addNewNoteResponseDTO;
+        CreateNoteResponseDTO createNoteResponseDTO = new CreateNoteResponseDTO(newNote.getId(), title, content);
+        return createNoteResponseDTO;
     }
 
     public List<GetAllNoteResponseDTO> getAllNotes() {
@@ -52,10 +51,29 @@ public class NoteService {
         return allNotesResponse;
     }
 
-    public EditNoteResponseDTO editNote(
-            EditNoteRequestDTO editNoteRequestDTO
+    public RandomNoteIdResponseDTO getRandomNoteId() {
+
+        Iterable<Note> allNotesConfidential = noteRepository.findAll();
+        List<Integer> allNoteIds = new ArrayList<>();
+
+        for (Note note : allNotesConfidential) {
+            Integer randomNoteId = note.getId();
+            allNoteIds.add(randomNoteId);
+        }
+
+        Random random = new Random();
+
+        Integer randomNoteId = allNoteIds.get(random.nextInt(allNoteIds.size()));
+
+        RandomNoteIdResponseDTO randomNoteIdResponseDTO = new RandomNoteIdResponseDTO(randomNoteId);
+
+        return randomNoteIdResponseDTO;
+    }
+
+    public UpdateNoteResponseDTO updateNote(
+            UpdateNoteRequestDTO updateNoteRequestDTO
     ) {
-        Integer noteId = editNoteRequestDTO.getNoteId();
+        Integer noteId = updateNoteRequestDTO.getNoteId();
 
         Optional<Note> optional = noteRepository.findById(noteId);
         if (optional.isEmpty()) {
@@ -64,15 +82,15 @@ public class NoteService {
         ;
 
         Note originalNote = optional.get();
-        originalNote.setTitle(editNoteRequestDTO.getTitle());
-        originalNote.setContent(editNoteRequestDTO.getContent());
+        originalNote.setTitle(updateNoteRequestDTO.getTitle());
+        originalNote.setContent(updateNoteRequestDTO.getContent());
         Note editedNote = noteRepository.save(originalNote);
 
-        EditNoteResponseDTO editNoteResponseDTO = new EditNoteResponseDTO(
+        UpdateNoteResponseDTO updateNoteResponseDTO = new UpdateNoteResponseDTO(
                 editedNote.getId(), editedNote.getTitle(), editedNote.getContent()
         );
 
-        return editNoteResponseDTO;
+        return updateNoteResponseDTO;
     }
 
     public DeleteNoteResponseDTO deleteNote(

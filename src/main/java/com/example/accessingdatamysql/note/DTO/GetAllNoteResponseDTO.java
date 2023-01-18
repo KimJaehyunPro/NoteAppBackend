@@ -1,46 +1,37 @@
 package com.example.accessingdatamysql.note.DTO;
 
 public class GetAllNoteResponseDTO {
-    private Integer id;
+    private Integer noteId;
     private String title;
     private String content;
 
-    public GetAllNoteResponseDTO(
-            Integer id,
-            String title,
-            String content
-    ) {
-        this.id = id;
+    public GetAllNoteResponseDTO(Integer noteId, String title, String content) {
+        this.noteId = noteId;
         this.title = title;
         this.content = content;
     }
 
-    public Integer getId() {
-        return id;
+    public Integer getNoteId() {
+        return noteId;
     }
 
-    public void setId(
-            Integer id
-    ) {
-        this.id = id;
+    public void setNoteId(Integer noteId) {
+        this.noteId = noteId;
     }
 
     public String getTitle() {
         return title;
     }
 
-    public void setTitle(
-            String title
-    ) {
+    public void setTitle(String title) {
         this.title = title;
     }
 
     public String getContent() {
         return content;
     }
-    public void setContent(
-            String content
-    ) {
+
+    public void setContent(String content) {
         this.content = content;
     }
 }
