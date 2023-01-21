@@ -30,7 +30,13 @@ public class TagService {
 
     public CreateTagResponseDTO createTag(CreateTagRequestDTO createTagRequestDTO) {
 
-        CreateTagResponseDTO createTagResponseDTO = new CreateTagResponseDTO(createTagRequestDTO.getTagName());
+        String tagName = createTagRequestDTO.getTagName();
+        Tag tag = new Tag();
+        tag.setTagName(tagName);
+
+        tagRepository.save(tag);
+
+        CreateTagResponseDTO createTagResponseDTO = new CreateTagResponseDTO(tagName);
         return createTagResponseDTO;
     }
 }
