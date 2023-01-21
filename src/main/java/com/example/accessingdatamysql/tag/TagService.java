@@ -1,5 +1,7 @@
 package com.example.accessingdatamysql.tag;
 
+import com.example.accessingdatamysql.tag.DTO.CreateTagRequestDTO;
+import com.example.accessingdatamysql.tag.DTO.CreateTagResponseDTO;
 import com.example.accessingdatamysql.tag.DTO.GetAllTagsResponseDTO;
 import org.springframework.stereotype.Service;
 
@@ -24,5 +26,11 @@ public class TagService {
             allTagsResponse.add(getAllTagsResponseDTO);
         }
         return allTagsResponse;
+    }
+
+    public CreateTagResponseDTO createTag(CreateTagRequestDTO createTagRequestDTO) {
+
+        CreateTagResponseDTO createTagResponseDTO = new CreateTagResponseDTO(createTagRequestDTO.getTagName());
+        return createTagResponseDTO;
     }
 }

@@ -17,13 +17,13 @@ public class Note {
 
     private String content;
 
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @ManyToMany(cascade = { CascadeType.ALL })
     @JoinTable(
-            name = "note_tag",
-            joinColumns = @JoinColumn(name = "note_id"),
-            inverseJoinColumns = @JoinColumn(name = "tag_id")
+            name = "note_tags",
+            joinColumns = { @JoinColumn(name = "note_id", referencedColumnName = "id") },
+            inverseJoinColumns = { @JoinColumn(name = "tag_id", referencedColumnName = "id") }
     )
-    private Set<Tag> tags =new HashSet<>();
+    private Set<Tag> tags = new HashSet<>();
 
     public Integer getId() {
         return id;

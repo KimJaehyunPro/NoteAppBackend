@@ -1,11 +1,10 @@
 package com.example.accessingdatamysql.tag;
 
 import com.example.accessingdatamysql.note.NoteService;
+import com.example.accessingdatamysql.tag.DTO.CreateTagRequestDTO;
+import com.example.accessingdatamysql.tag.DTO.CreateTagResponseDTO;
 import com.example.accessingdatamysql.tag.DTO.GetAllTagsResponseDTO;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -23,5 +22,13 @@ public class TagController {
     @GetMapping("/all")
     public List<GetAllTagsResponseDTO> getAllTags() {
         return tagService.getAllTags();
+    }
+
+    @PostMapping("/create")
+    public CreateTagResponseDTO createTag(
+            @RequestBody
+            CreateTagRequestDTO tagName
+    ) {
+        return tagService.createTag(tagName);
     }
 }
