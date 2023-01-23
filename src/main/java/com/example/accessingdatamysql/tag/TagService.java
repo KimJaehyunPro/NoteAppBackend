@@ -2,7 +2,10 @@ package com.example.accessingdatamysql.tag;
 
 import com.example.accessingdatamysql.tag.DTO.CreateTagRequestDTO;
 import com.example.accessingdatamysql.tag.DTO.CreateTagResponseDTO;
+import com.example.accessingdatamysql.tag.DTO.DeleteTagRequestDTO;
+import com.example.accessingdatamysql.tag.DTO.DeleteTagResponseDTO;
 import com.example.accessingdatamysql.tag.DTO.GetAllTagsResponseDTO;
+
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -22,7 +25,7 @@ public class TagService {
         List<GetAllTagsResponseDTO> allTagsResponse = new ArrayList<>();
 
         for (Tag tag : allTags){
-            GetAllTagsResponseDTO getAllTagsResponseDTO = new GetAllTagsResponseDTO(tag.getTagName());
+            GetAllTagsResponseDTO getAllTagsResponseDTO = new GetAllTagsResponseDTO(tag.getId(), tag.getTagName());
             allTagsResponse.add(getAllTagsResponseDTO);
         }
         return allTagsResponse;
@@ -36,7 +39,16 @@ public class TagService {
 
         tagRepository.save(tag);
 
-        CreateTagResponseDTO createTagResponseDTO = new CreateTagResponseDTO(tagName);
+        CreateTagResponseDTO createTagResponseDTO = new CreateTagResponseDTO(tag.getId(), tag.getTagName());
         return createTagResponseDTO;
+    }
+
+    public DeleteTagResponseDTO deleteTag(DeleteTagRequestDTO deleteTagRequestDTO) {
+        Integer tagId = deleteTagRequestDTO.getTagId();
+        tagRepository.deleteById(tagId);
+
+        DeleteTagResponseDTO deleteTagResponseDTO =new DeleteTagResponseDTO(tagId);
+
+        return deleteTagResponseDTO;
     }
 }
