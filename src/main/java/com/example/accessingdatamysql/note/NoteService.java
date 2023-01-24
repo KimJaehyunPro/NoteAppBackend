@@ -24,7 +24,7 @@ public class NoteService {
         return noteRepository.findById(id);
     }
 
-    public CreateNoteResponseDTO createNote(
+    public CreateNoteResponseDTO createNoteWithoutComments(
             String title,
             String content,
             List<String> tagNames
@@ -47,6 +47,37 @@ public class NoteService {
 
         return new CreateNoteResponseDTO(newNote.getId(), title, content, tagSetString);
     }
+
+    // TODO: Make this method to return Note, not CreateNoteResponseDTO. Converting to CreateNoteResponseDT from Note can be done in controller instead.
+    /**
+     * Create a note with title, content, and tag names.
+     * @param title a String
+     * @param content a String
+     * @param tagNames a list<String>
+     * @return a CreateNoteResponseDTO with id, title, content, and createdTagNames.
+     */
+    public CreateNoteResponseDTO createNote(
+            String title,
+            String content,
+            List<String> tagNames
+    ) {
+
+        // Create a new Note with title and content given as inputs
+        Note newNote = new Note();
+        newNote.setTitle(title);
+        newNote.setContent(content);
+
+        // Get Tags that correspond to the tagNames. If the Tags don't exist, create them and return.
+        Set<Tag> tags = tagService.getOrCreateTags(tagNames);
+        // Set the new Note's tags with the tags you've retrieved from getOrCreateTags.
+        newNote.setTags(tags);
+        // Save the new Note
+        Note createdNote = noteRepository.save(newNote);
+        List<String> retrievedTagNamesList = tagService.getListOfTagNames(createdNote.getTags());
+
+        return new CreateNoteResponseDTO(newNote.getId(), title, content, retrievedTagNamesList);
+    }
+
 
     public List<GetAllNoteResponseDTO> getAllNotes() {
 

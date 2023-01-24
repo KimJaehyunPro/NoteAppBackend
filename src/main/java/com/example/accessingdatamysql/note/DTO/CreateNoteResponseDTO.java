@@ -7,6 +7,7 @@ public class CreateNoteResponseDTO {
     private Integer noteId;
     private String title;
     private String content;
+
     private List<String> tagNames;
 
     public CreateNoteResponseDTO(Integer noteId, String title, String content, List<String> tagNames) {

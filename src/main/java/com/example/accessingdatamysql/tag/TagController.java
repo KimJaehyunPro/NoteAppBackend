@@ -28,9 +28,14 @@ public class TagController {
     @PostMapping("/create")
     public CreateTagResponseDTO createTag(
             @RequestBody
-            CreateTagRequestDTO tagName
+            CreateTagRequestDTO createTagRequestDTO
     ) {
-        return tagService.createTag(tagName);
+        // Service should do all or most of the logic.
+        Tag tag = tagService.createTag(createTagRequestDTO.getTagName());
+
+        // The only logic that controller should do is converting it to DTO response.
+        CreateTagResponseDTO dto = new CreateTagResponseDTO(tag.getId(), tag.getTagName());
+        return dto;
     }
 
     @PostMapping("/delete")
