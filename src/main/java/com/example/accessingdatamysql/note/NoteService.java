@@ -1,41 +1,51 @@
 package com.example.accessingdatamysql.note;
 
 import com.example.accessingdatamysql.note.DTO.*;
+import com.example.accessingdatamysql.tag.Tag;
+import com.example.accessingdatamysql.tag.TagService;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Random;
+import java.util.*;
 
 @Service
 public class NoteService {
 
-    private NoteRepository noteRepository;
+    private final NoteRepository noteRepository;
+    private final TagService tagService;
 
-    public NoteService(NoteRepository noteRepository) {
+    public NoteService(NoteRepository noteRepository, TagService tagService) {
         this.noteRepository = noteRepository;
+        this.tagService = tagService;
     }
 
     public Optional<Note> viewNote(
             Integer id
     ) {
-        Optional<Note> note = noteRepository.findById(id);
-        return note;
+        return noteRepository.findById(id);
     }
 
     public CreateNoteResponseDTO createNote(
             String title,
-            String content
+            String content,
+            List<String> tagNames
     ) {
 
         Note newNote = new Note();
         newNote.setTitle(title);
         newNote.setContent(content);
+        newNote.setTags(tagService.getTags(tagNames));
+
+        // Convert List of Tag(newNote.getTags) into List of String
+        // Iterate over newNote.getTags() and convert every element(Tag) into String
+        List<String> tagSetString = new ArrayList<String>();
+
+        for (Tag tag : newNote.getTags()) {
+            tagSetString.add(tag.getTagName());
+        }
+
         noteRepository.save(newNote);
 
-        CreateNoteResponseDTO createNoteResponseDTO = new CreateNoteResponseDTO(newNote.getId(), title, content);
-        return createNoteResponseDTO;
+        return new CreateNoteResponseDTO(newNote.getId(), title, content, tagSetString);
     }
 
     public List<GetAllNoteResponseDTO> getAllNotes() {
@@ -65,9 +75,7 @@ public class NoteService {
 
         Integer randomNoteId = allNoteIds.get(random.nextInt(allNoteIds.size()));
 
-        RandomNoteIdResponseDTO randomNoteIdResponseDTO = new RandomNoteIdResponseDTO(randomNoteId);
-
-        return randomNoteIdResponseDTO;
+        return new RandomNoteIdResponseDTO(randomNoteId);
     }
 
     public UpdateNoteResponseDTO updateNote(
@@ -79,18 +87,13 @@ public class NoteService {
         if (optional.isEmpty()) {
             return null;
         }
-        ;
 
         Note originalNote = optional.get();
         originalNote.setTitle(updateNoteRequestDTO.getTitle());
         originalNote.setContent(updateNoteRequestDTO.getContent());
         Note editedNote = noteRepository.save(originalNote);
 
-        UpdateNoteResponseDTO updateNoteResponseDTO = new UpdateNoteResponseDTO(
-                editedNote.getId(), editedNote.getTitle(), editedNote.getContent()
-        );
-
-        return updateNoteResponseDTO;
+        return new UpdateNoteResponseDTO(editedNote.getId(), editedNote.getTitle(), editedNote.getContent());
     }
 
     public DeleteNoteResponseDTO deleteNote(
@@ -98,7 +101,7 @@ public class NoteService {
     ) {
         Integer noteId = deleteNoteRequestDTO.getNoteId();
         noteRepository.deleteById(noteId);
-        DeleteNoteResponseDTO deleteNoteResponseDTO = new DeleteNoteResponseDTO(noteId);
-        return deleteNoteResponseDTO;
+
+        return new DeleteNoteResponseDTO(noteId);
     }
 }

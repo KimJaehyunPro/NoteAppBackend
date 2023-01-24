@@ -1,19 +1,19 @@
 package com.example.accessingdatamysql.note.DTO;
 
+import java.util.List;
+
 public class CreateNoteResponseDTO {
 
     private Integer noteId;
     private String title;
     private String content;
+    private List<String> tagNames;
 
-    public CreateNoteResponseDTO(
-            Integer noteId,
-            String title,
-            String content
-    ) {
+    public CreateNoteResponseDTO(Integer noteId, String title, String content, List<String> tagNames) {
         this.noteId = noteId;
         this.title = title;
         this.content = content;
+        this.tagNames = tagNames;
     }
 
     public Integer getNoteId() {
@@ -38,5 +38,13 @@ public class CreateNoteResponseDTO {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    public List<String> getTagNames() {
+        return tagNames;
+    }
+
+    public void setTagNames(List<String> tagNames) {
+        this.tagNames = tagNames;
     }
 }

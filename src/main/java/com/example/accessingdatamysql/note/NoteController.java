@@ -35,7 +35,7 @@ public class NoteController {
             @RequestBody
             CreateNoteRequestDTO createNoteRequestDTO
     ) {
-        return noteService.createNote(createNoteRequestDTO.getTitle(), createNoteRequestDTO.getContent());
+        return noteService.createNote(createNoteRequestDTO.getTitle(), createNoteRequestDTO.getContent(), createNoteRequestDTO.getTagNames());
     }
 
     @PostMapping("/delete")

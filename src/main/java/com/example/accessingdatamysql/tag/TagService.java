@@ -9,15 +9,29 @@ import com.example.accessingdatamysql.tag.DTO.GetAllTagsResponseDTO;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class TagService {
 
-    private TagRepository tagRepository;
+    private final TagRepository tagRepository;
 
     public TagService(TagRepository tagRepository) {
         this.tagRepository = tagRepository;
+    }
+
+    public Set<Tag> getTags(List<String> tagNames) {
+
+        Set<Tag> tags = new HashSet<>();
+
+        for (String tagName : tagNames) {
+            Tag tag = tagRepository.findByTagName(tagName);
+            tags.add(tag);
+        }
+
+        return tags;
     }
 
     public List<GetAllTagsResponseDTO> getAllTags() {
@@ -39,16 +53,14 @@ public class TagService {
 
         tagRepository.save(tag);
 
-        CreateTagResponseDTO createTagResponseDTO = new CreateTagResponseDTO(tag.getId(), tag.getTagName());
-        return createTagResponseDTO;
+
+        return new CreateTagResponseDTO(tag.getId(), tag.getTagName());
     }
 
     public DeleteTagResponseDTO deleteTag(DeleteTagRequestDTO deleteTagRequestDTO) {
         Integer tagId = deleteTagRequestDTO.getTagId();
         tagRepository.deleteById(tagId);
 
-        DeleteTagResponseDTO deleteTagResponseDTO =new DeleteTagResponseDTO(tagId);
-
-        return deleteTagResponseDTO;
+        return new DeleteTagResponseDTO(tagId);
     }
 }
