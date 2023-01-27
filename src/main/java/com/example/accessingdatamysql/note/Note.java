@@ -1,6 +1,7 @@
 package com.example.accessingdatamysql.note;
 
 import com.example.accessingdatamysql.tag.Tag;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.util.HashSet;
@@ -24,6 +25,7 @@ public class Note {
             joinColumns = { @JoinColumn(name = "note_id", referencedColumnName = "id") },
             inverseJoinColumns = { @JoinColumn(name = "tag_id", referencedColumnName = "id") }
     )
+    @JsonManagedReference
     private Set<Tag> tags = new HashSet<>();
 
     public Integer getId() {

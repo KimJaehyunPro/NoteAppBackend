@@ -1,7 +1,6 @@
 package com.example.accessingdatamysql.note;
 
 import com.example.accessingdatamysql.note.DTO.*;
-import com.example.accessingdatamysql.tag.Tag;
 import com.example.accessingdatamysql.tag.TagService;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,7 +25,7 @@ public class NoteController {
             Integer noteId
     ) {
         Note note = noteService.findById(noteId);
-        return new GetNoteResponseDTO(note.getId(), note.getTitle(), note.getContent());
+        return new GetNoteResponseDTO(note.getId(), note.getTitle(), note.getContent(), note.getTags());
     }
 
     @GetMapping("/all")

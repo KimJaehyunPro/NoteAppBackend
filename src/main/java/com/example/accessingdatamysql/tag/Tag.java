@@ -1,5 +1,6 @@
 package com.example.accessingdatamysql.tag;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
 import java.util.HashSet;
@@ -18,6 +19,7 @@ public class Tag {
     private String tagName;
 
     @ManyToMany(mappedBy = "tags")
+    @JsonBackReference
     private Set<Note> notes = new HashSet<>();
 
     public Integer getId() {

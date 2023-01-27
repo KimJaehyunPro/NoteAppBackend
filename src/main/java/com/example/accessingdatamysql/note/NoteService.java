@@ -52,7 +52,7 @@ public class NoteService {
         List<GetAllNoteResponseDTO> allNotesResponse = new ArrayList<>();
 
         for (Note note : allNotesConfidential) {
-            GetAllNoteResponseDTO getAllNoteResponseDTO = new GetAllNoteResponseDTO(note.getId(), note.getTitle(), note.getContent());
+            GetAllNoteResponseDTO getAllNoteResponseDTO = new GetAllNoteResponseDTO(note.getId(), note.getTitle(), note.getContent(), note.getTags());
             allNotesResponse.add(getAllNoteResponseDTO);
         }
 
