@@ -15,9 +15,10 @@ public class Note {
 
     private String title;
 
+    @Column(columnDefinition = "TEXT", length = 65535)
     private String content;
 
-    @ManyToMany(cascade = { CascadeType.ALL })
+    @ManyToMany()
     @JoinTable(
             name = "note_tags",
             joinColumns = { @JoinColumn(name = "note_id", referencedColumnName = "id") },

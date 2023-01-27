@@ -4,6 +4,7 @@ import com.example.accessingdatamysql.note.DTO.*;
 import com.example.accessingdatamysql.tag.Tag;
 import com.example.accessingdatamysql.tag.TagService;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.*;
 
@@ -18,13 +19,22 @@ public class NoteService {
         this.tagService = tagService;
     }
 
-    public Optional<Note> viewNote(
-            Integer id
+    public ViewNoteResponseDTO viewNote(
+            Integer noteId
     ) {
-        return noteRepository.findById(id);
+        Optional<Note> noteOptional = noteRepository.findById(noteId);
+        if (noteOptional.isPresent()) {
+            Note note = noteOptional.get();
+            return new ViewNoteResponseDTO(note.getId(), note.getTitle(), note.getContent());
+        } else {
+            Note blankNote = new Note();
+            blankNote.setTitle("blank title");
+            blankNote.setContent("blank content");
+            return new ViewNoteResponseDTO(blankNote.getId(), blankNote.getTitle(), blankNote.getContent());
+        }
     }
 
-    public CreateNoteResponseDTO createNoteWithoutComments(
+    public CreateNoteResponseDTO createNote(
             String title,
             String content,
             List<String> tagNames
@@ -47,37 +57,6 @@ public class NoteService {
 
         return new CreateNoteResponseDTO(newNote.getId(), title, content, tagSetString);
     }
-
-    // TODO: Make this method to return Note, not CreateNoteResponseDTO. Converting to CreateNoteResponseDT from Note can be done in controller instead.
-    /**
-     * Create a note with title, content, and tag names.
-     * @param title a String
-     * @param content a String
-     * @param tagNames a list<String>
-     * @return a CreateNoteResponseDTO with id, title, content, and createdTagNames.
-     */
-    public CreateNoteResponseDTO createNote(
-            String title,
-            String content,
-            List<String> tagNames
-    ) {
-
-        // Create a new Note with title and content given as inputs
-        Note newNote = new Note();
-        newNote.setTitle(title);
-        newNote.setContent(content);
-
-        // Get Tags that correspond to the tagNames. If the Tags don't exist, create them and return.
-        Set<Tag> tags = tagService.getOrCreateTags(tagNames);
-        // Set the new Note's tags with the tags you've retrieved from getOrCreateTags.
-        newNote.setTags(tags);
-        // Save the new Note
-        Note createdNote = noteRepository.save(newNote);
-        List<String> retrievedTagNamesList = tagService.getListOfTagNames(createdNote.getTags());
-
-        return new CreateNoteResponseDTO(newNote.getId(), title, content, retrievedTagNamesList);
-    }
-
 
     public List<GetAllNoteResponseDTO> getAllNotes() {
 

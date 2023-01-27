@@ -18,7 +18,7 @@ public class NoteController {
     }
 
     @GetMapping("/{noteId}")
-    public Optional<Note> ViewNote(
+    public ViewNoteResponseDTO ViewNote(
             @PathVariable
             Integer noteId
     ) {
