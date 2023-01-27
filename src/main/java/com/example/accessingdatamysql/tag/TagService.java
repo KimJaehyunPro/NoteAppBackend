@@ -24,24 +24,17 @@ public class TagService {
         Set<Tag> tags = new HashSet<>();
 
         for (String tagName : tagNames) {
-            Optional<Tag> tag = tagRepository.findByTagName(tagName);
-            if (tag.isPresent()) {
-                tags.add(tag.get());
+            Optional<Tag> optionalTag = tagRepository.findByTagName(tagName);
+            if (optionalTag.isPresent()) {
+                tags.add(optionalTag.get());
             }
         }
 
         return tags;
     }
 
-    public List<GetAllTagsResponseDTO> getAllTags() {
-        Iterable<Tag> allTags = tagRepository.findAll();
-        List<GetAllTagsResponseDTO> allTagsResponse = new ArrayList<>();
-
-        for (Tag tag : allTags){
-            GetAllTagsResponseDTO getAllTagsResponseDTO = new GetAllTagsResponseDTO(tag.getId(), tag.getTagName());
-            allTagsResponse.add(getAllTagsResponseDTO);
-        }
-        return allTagsResponse;
+    public Iterable<Tag> getAllTags() {
+        return tagRepository.findAll();
     }
 
     public Tag createTag(String tagName) {
@@ -81,15 +74,22 @@ public class TagService {
      * @return a set of created or exisiting tags
      */
     public Set<Tag> getOrCreateTags(List<String> tagNames) {
-        Set<Tag> tags = new HashSet<>();
+
+        Set<Tag> tagSet = new HashSet<>();
+
         for (String tagName : tagNames) {
-            Optional<Tag> optionalTag = tagRepository.findByTagName(tagName);
-            if (optionalTag.isPresent()) {
-                tags.add(optionalTag.get());
+            Optional<Tag> tag = tagRepository.findByTagName(tagName);
+            if (tag.isPresent()) {
+                tagSet.add(tag.get());
             } else {
-                tags.add(createTag(tagName));
+                Tag tagToCreate = new Tag();
+                tagToCreate.setTagName(tagName);
+                Tag createdTag = tagRepository.save(tagToCreate);
+                tagSet.add(createdTag);
             }
         }
-        return tags;
+
+        return tagSet;
+
     }
 }

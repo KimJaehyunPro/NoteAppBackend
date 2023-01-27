@@ -4,7 +4,6 @@ import com.example.accessingdatamysql.note.DTO.*;
 import com.example.accessingdatamysql.tag.Tag;
 import com.example.accessingdatamysql.tag.TagService;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.*;
 
@@ -19,22 +18,16 @@ public class NoteService {
         this.tagService = tagService;
     }
 
-    public ViewNoteResponseDTO viewNote(
+    public Note findById(
             Integer noteId
     ) {
         Optional<Note> noteOptional = noteRepository.findById(noteId);
-        if (noteOptional.isPresent()) {
-            Note note = noteOptional.get();
-            return new ViewNoteResponseDTO(note.getId(), note.getTitle(), note.getContent());
-        } else {
-            Note blankNote = new Note();
-            blankNote.setTitle("blank title");
-            blankNote.setContent("blank content");
-            return new ViewNoteResponseDTO(blankNote.getId(), blankNote.getTitle(), blankNote.getContent());
-        }
+
+        Note note = noteOptional.get();
+        return note;
     }
 
-    public CreateNoteResponseDTO createNote(
+    public Note createNote(
             String title,
             String content,
             List<String> tagNames
@@ -43,19 +36,14 @@ public class NoteService {
         Note newNote = new Note();
         newNote.setTitle(title);
         newNote.setContent(content);
-        newNote.setTags(tagService.getTags(tagNames));
 
-        // Convert List of Tag(newNote.getTags) into List of String
-        // Iterate over newNote.getTags() and convert every element(Tag) into String
-        List<String> tagSetString = new ArrayList<String>();
+        // Get all the tags
+        Set<Tag> tags = tagService.getOrCreateTags(tagNames);
+        newNote.setTags(tags);
 
-        for (Tag tag : newNote.getTags()) {
-            tagSetString.add(tag.getTagName());
-        }
+        Note createdNote = noteRepository.save(newNote);
 
-        noteRepository.save(newNote);
-
-        return new CreateNoteResponseDTO(newNote.getId(), title, content, tagSetString);
+        return createdNote;
     }
 
     public List<GetAllNoteResponseDTO> getAllNotes() {

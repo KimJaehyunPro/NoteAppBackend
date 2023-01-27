@@ -1,13 +1,11 @@
 package com.example.accessingdatamysql.note.DTO;
 
-import jakarta.persistence.criteria.CriteriaBuilder;
-
-public class ViewNoteResponseDTO {
+public class GetNoteResponseDTO {
     private Integer noteId;
     private String title;
     private String content;
 
-    public ViewNoteResponseDTO(Integer noteId, String title, String content) {
+    public GetNoteResponseDTO(Integer noteId, String title, String content) {
         this.noteId = noteId;
         this.title = title;
         this.content = content;

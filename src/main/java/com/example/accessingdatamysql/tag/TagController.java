@@ -7,6 +7,7 @@ import com.example.accessingdatamysql.tag.DTO.DeleteTagRequestDTO;
 import com.example.accessingdatamysql.tag.DTO.DeleteTagResponseDTO;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -22,7 +23,15 @@ public class TagController {
 
     @GetMapping("/all")
     public List<GetAllTagsResponseDTO> getAllTags() {
-        return tagService.getAllTags();
+
+        List<GetAllTagsResponseDTO> allTagsResponse = new ArrayList<>();
+
+        Iterable<Tag> allTags = tagService.getAllTags();
+        for (Tag tag : allTags){
+            GetAllTagsResponseDTO getAllTagsResponseDTO = new GetAllTagsResponseDTO(tag.getId(), tag.getTagName());
+            allTagsResponse.add(getAllTagsResponseDTO);
+        }
+        return allTagsResponse;
     }
 
     @PostMapping("/create")

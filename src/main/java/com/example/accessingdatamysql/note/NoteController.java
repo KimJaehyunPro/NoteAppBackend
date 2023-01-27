@@ -2,9 +2,11 @@ package com.example.accessingdatamysql.note;
 
 import com.example.accessingdatamysql.note.DTO.*;
 import org.springframework.web.bind.annotation.*;
+import com.example.accessingdatamysql.tag.Tag;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
+import java.util.Set;
 
 @RestController
 @CrossOrigin(origins = "*")
@@ -18,11 +20,12 @@ public class NoteController {
     }
 
     @GetMapping("/{noteId}")
-    public ViewNoteResponseDTO ViewNote(
+    public GetNoteResponseDTO GetNote(
             @PathVariable
             Integer noteId
     ) {
-        return noteService.viewNote(noteId);
+        Note note = noteService.findById(noteId);
+        return new GetNoteResponseDTO(note.getId(), note.getTitle(), note.getContent());
     }
 
     @GetMapping("/all")
@@ -35,7 +38,19 @@ public class NoteController {
             @RequestBody
             CreateNoteRequestDTO createNoteRequestDTO
     ) {
-        return noteService.createNote(createNoteRequestDTO.getTitle(), createNoteRequestDTO.getContent(), createNoteRequestDTO.getTagNames());
+        Note createdNote = noteService.createNote(createNoteRequestDTO.getTitle(), createNoteRequestDTO.getContent(), createNoteRequestDTO.getTagNames());
+        return new CreateNoteResponseDTO(createdNote.getId(), createdNote.getTitle(), createdNote.getContent(), convertTagSetToStringList(createdNote.getTags()));
+    }
+
+    private List<String> convertTagSetToStringList(Set<Tag> tagSet) {
+
+        List<String> tagStringList = new ArrayList<>();
+
+        for (Tag tag : tagSet) {
+            tagStringList.add(tag.getTagName());
+        }
+
+        return tagStringList;
     }
 
     @PostMapping("/delete")
