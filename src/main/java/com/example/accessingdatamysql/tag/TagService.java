@@ -33,8 +33,14 @@ public class TagService {
         return tags;
     }
 
-    public Iterable<Tag> getAllTags() {
-        return tagRepository.findAll();
+    public List<Tag> getAllTags() {
+        List<Tag> tagsList = new ArrayList<>();
+        Iterable<Tag> tagsIterable = tagRepository.findAll();
+
+        tagsIterable.forEach(
+                tagsList::add
+        );
+        return tagsList;
     }
 
     public Tag createTag(String tagName) {
@@ -66,6 +72,17 @@ public class TagService {
         }
 
         return tagNamesStrings;
+    }
+
+    public List<String> convertTagSetToStringList(Set<Tag> tagSet) {
+
+        List<String> tagStringList = new ArrayList<>();
+
+        for (Tag tag : tagSet) {
+            tagStringList.add(tag.getTagName());
+        }
+
+        return tagStringList;
     }
 
     /**

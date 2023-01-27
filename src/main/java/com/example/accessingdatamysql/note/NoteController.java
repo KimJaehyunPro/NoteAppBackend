@@ -1,12 +1,11 @@
 package com.example.accessingdatamysql.note;
 
 import com.example.accessingdatamysql.note.DTO.*;
-import org.springframework.web.bind.annotation.*;
 import com.example.accessingdatamysql.tag.Tag;
+import com.example.accessingdatamysql.tag.TagService;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 @RestController
 @CrossOrigin(origins = "*")
@@ -14,9 +13,11 @@ import java.util.Set;
 public class NoteController {
 
     public final NoteService noteService;
+    public final TagService tagService;
 
-    public NoteController(NoteService noteService) {
+    public NoteController(NoteService noteService, TagService tagService) {
         this.noteService = noteService;
+        this.tagService = tagService;
     }
 
     @GetMapping("/{noteId}")
@@ -39,18 +40,13 @@ public class NoteController {
             CreateNoteRequestDTO createNoteRequestDTO
     ) {
         Note createdNote = noteService.createNote(createNoteRequestDTO.getTitle(), createNoteRequestDTO.getContent(), createNoteRequestDTO.getTagNames());
-        return new CreateNoteResponseDTO(createdNote.getId(), createdNote.getTitle(), createdNote.getContent(), convertTagSetToStringList(createdNote.getTags()));
-    }
-
-    private List<String> convertTagSetToStringList(Set<Tag> tagSet) {
-
-        List<String> tagStringList = new ArrayList<>();
-
-        for (Tag tag : tagSet) {
-            tagStringList.add(tag.getTagName());
-        }
-
-        return tagStringList;
+        List<String> tagStringList = tagService.convertTagSetToStringList(createdNote.getTags());
+        return new CreateNoteResponseDTO(
+                createdNote.getId(),
+                createdNote.getTitle(),
+                createdNote.getContent(),
+                tagStringList
+        );
     }
 
     @PostMapping("/delete")

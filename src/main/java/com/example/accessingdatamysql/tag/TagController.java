@@ -26,7 +26,7 @@ public class TagController {
 
         List<GetAllTagsResponseDTO> allTagsResponse = new ArrayList<>();
 
-        Iterable<Tag> allTags = tagService.getAllTags();
+        List<Tag> allTags = tagService.getAllTags();
         for (Tag tag : allTags){
             GetAllTagsResponseDTO getAllTagsResponseDTO = new GetAllTagsResponseDTO(tag.getId(), tag.getTagName());
             allTagsResponse.add(getAllTagsResponseDTO);
