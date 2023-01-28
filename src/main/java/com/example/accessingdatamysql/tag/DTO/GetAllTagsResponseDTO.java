@@ -2,20 +2,20 @@ package com.example.accessingdatamysql.tag.DTO;
 
 public class GetAllTagsResponseDTO {
 
-    private Integer tagId;
+    private Integer id;
     private String tagName;
 
-    public GetAllTagsResponseDTO(Integer tagId, String tagName) {
-        this.tagId = tagId;
+    public GetAllTagsResponseDTO(Integer id, String tagName) {
+        this.id = id;
         this.tagName = tagName;
     }
 
-    public Integer getTagId() {
-        return tagId;
+    public Integer getId() {
+        return id;
     }
 
-    public void setTagId(Integer tagId) {
-        this.tagId = tagId;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public String getTagName() {
