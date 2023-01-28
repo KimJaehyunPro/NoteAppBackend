@@ -87,11 +87,16 @@ public class NoteService {
         }
 
         Note originalNote = optional.get();
+
         originalNote.setTitle(updateNoteRequestDTO.getTitle());
         originalNote.setContent(updateNoteRequestDTO.getContent());
+
+        Set<Tag> retrievedTags = tagService.getOrCreateTags(updateNoteRequestDTO.getTags());
+        originalNote.setTags(retrievedTags);
+
         Note editedNote = noteRepository.save(originalNote);
 
-        return new UpdateNoteResponseDTO(editedNote.getId(), editedNote.getTitle(), editedNote.getContent());
+        return new UpdateNoteResponseDTO(editedNote.getId(), editedNote.getTitle(), editedNote.getContent(), tagService.convertTagSetToStringList(retrievedTags));
     }
 
     public DeleteNoteResponseDTO deleteNote(

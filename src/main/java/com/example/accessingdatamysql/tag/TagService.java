@@ -85,6 +85,19 @@ public class TagService {
         return tagStringList;
     }
 
+    public Set<Tag> convertStringListToTagSet(List<String> TagStringList) {
+        List<String> tagStringList = TagStringList;
+        Set<Tag> tagSet = new HashSet<>();
+
+        for (String tagString : tagStringList) {
+            Tag tag = new Tag();
+            tag.setTagName(tagString);
+            tagSet.add(tag);
+        }
+
+        return tagSet;
+    }
+
     /**
      * Get a list of tagNames, if it doesn't exist, create tag(s)
      * @param tagNames a list of tag names
@@ -95,18 +108,21 @@ public class TagService {
         Set<Tag> tagSet = new HashSet<>();
 
         for (String tagName : tagNames) {
-            Optional<Tag> tag = tagRepository.findByTagName(tagName);
-            if (tag.isPresent()) {
-                tagSet.add(tag.get());
-            } else {
-                Tag tagToCreate = new Tag();
-                tagToCreate.setTagName(tagName);
-                Tag createdTag = tagRepository.save(tagToCreate);
-                tagSet.add(createdTag);
-            }
+            Tag tag = getOrCreateTag(tagName);
+            tagSet.add(tag);
         }
-
         return tagSet;
+    }
 
+    public Tag getOrCreateTag (String tagName) {
+        Optional<Tag> tag = tagRepository.findByTagName(tagName);
+        if (tag.isPresent()) {
+            return tag.get();
+        } else {
+            Tag tagToCreate = new Tag();
+            tagToCreate.setTagName(tagName);
+            Tag createdTag = tagRepository.save(tagToCreate);
+            return createdTag;
+        }
     }
 }
