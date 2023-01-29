@@ -27,6 +27,14 @@ public class NoteService {
         return note;
     }
 
+    public Note findByTitle(
+            String title
+    ) {
+        Optional<Note> noteOptional = noteRepository.findNoteByTitle(title);
+        Note note = noteOptional.get();
+        return note;
+    }
+
     public Note createNote(
             String title,
             String content,

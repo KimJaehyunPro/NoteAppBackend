@@ -20,12 +20,26 @@ public class NoteController {
     }
 
     @GetMapping("/{noteId}")
-    public GetNoteResponseDTO GetNote(
+    public GetNoteByIdResponseDTO GetNoteById(
             @PathVariable
             Integer noteId
     ) {
         Note note = noteService.findById(noteId);
-        return new GetNoteResponseDTO(note.getId(), note.getTitle(), note.getContent(), note.getTags());
+        return new GetNoteByIdResponseDTO(note.getId(), note.getTitle(), note.getContent(), note.getTags());
+    }
+
+        @PostMapping("/GetNoteByTitle")
+    public GetNoteByTitleResponseDTO GetNoteByTitle(
+            @RequestBody
+            GetNoteByTitleRequestDTO getNoteByTitleRequestDTO
+    ) {
+        Note note = noteService.findByTitle(getNoteByTitleRequestDTO.getTitle());
+        return new GetNoteByTitleResponseDTO(note.getId(), note.getTitle(), note.getContent(), note.getTags());
+    }
+
+    @GetMapping("/randomNoteId")
+    public RandomNoteIdResponseDTO getRandomNoteId() {
+        return noteService.getRandomNoteId();
     }
 
     @GetMapping("/all")
@@ -64,8 +78,4 @@ public class NoteController {
         return noteService.updateNote(updateNoteRequestDTO);
     }
 
-    @GetMapping("/randomNoteId")
-    public RandomNoteIdResponseDTO getRandomNoteId() {
-        return noteService.getRandomNoteId();
-    }
 }

@@ -4,13 +4,13 @@ import com.example.accessingdatamysql.tag.Tag;
 
 import java.util.Set;
 
-public class GetNoteResponseDTO {
+public class GetNoteByIdResponseDTO {
     private Integer noteId;
     private String title;
     private String content;
     private Set<Tag> tags;
 
-    public GetNoteResponseDTO(Integer noteId, String title, String content, Set<Tag> tags) {
+    public GetNoteByIdResponseDTO(Integer noteId, String title, String content, Set<Tag> tags) {
         this.noteId = noteId;
         this.title = title;
         this.content = content;
