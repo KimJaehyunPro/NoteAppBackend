@@ -28,7 +28,7 @@ public class NoteController {
         return new GetNoteByIdResponseDTO(note.getId(), note.getTitle(), note.getContent(), note.getTags());
     }
 
-        @PostMapping("/GetNoteByTitle")
+    @PostMapping("/GetNoteByTitle")
     public GetNoteByTitleResponseDTO GetNoteByTitle(
             @RequestBody
             GetNoteByTitleRequestDTO getNoteByTitleRequestDTO

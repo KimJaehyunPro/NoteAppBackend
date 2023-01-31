@@ -8,13 +8,13 @@ public class UpdateNoteRequestDTO {
     private Integer noteId;
     private String title;
     private String content;
-    private List<String> tags;
+    private List<String> tagNames;
 
-    public UpdateNoteRequestDTO(Integer noteId, String title, String content, List<String> tags) {
+    public UpdateNoteRequestDTO(Integer noteId, String title, String content, List<String> tagNames) {
         this.noteId = noteId;
         this.title = title;
         this.content = content;
-        this.tags = tags;
+        this.tagNames = tagNames;
     }
 
     public Integer getNoteId() {
@@ -41,11 +41,11 @@ public class UpdateNoteRequestDTO {
         this.content = content;
     }
 
-    public List<String> getTags() {
-        return tags;
+    public List<String> getTagNames() {
+        return tagNames;
     }
 
-    public void setTags(List<String> tags) {
-        this.tags = tags;
+    public void setTagNames(List<String> tagNames) {
+        this.tagNames = tagNames;
     }
 }

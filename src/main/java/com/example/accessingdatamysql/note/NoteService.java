@@ -99,7 +99,7 @@ public class NoteService {
         originalNote.setTitle(updateNoteRequestDTO.getTitle());
         originalNote.setContent(updateNoteRequestDTO.getContent());
 
-        Set<Tag> retrievedTags = tagService.getOrCreateTags(updateNoteRequestDTO.getTags());
+        Set<Tag> retrievedTags = tagService.getOrCreateTags(updateNoteRequestDTO.getTagNames());
         originalNote.setTags(retrievedTags);
 
         Note editedNote = noteRepository.save(originalNote);
