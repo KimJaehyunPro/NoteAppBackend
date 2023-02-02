@@ -5,6 +5,5 @@ import java.util.Optional;
 
 public interface NoteRepository extends CrudRepository<Note, Integer> {
     Optional<Note> findNoteByTitle(String tagName);
-
-    //Optional<Iterable<Note>> findAllOrderByIdDesc();
+    Optional<Iterable<Note>> findAllByOrderByIdDesc();
 }

@@ -56,7 +56,13 @@ public class NoteService {
 
     public List<GetAllNoteResponseDTO> getAllNotes() {
 
-        Iterable<Note> allNotesConfidential = noteRepository.findAll();
+        Iterable<Note> allNotesConfidential = new ArrayList<>();
+
+        Optional<Iterable<Note>> allNotesConfidentialOptional = noteRepository.findAllByOrderByIdDesc();
+        if (allNotesConfidentialOptional.isPresent()) {
+            allNotesConfidential = allNotesConfidentialOptional.get();
+        }
+
         List<GetAllNoteResponseDTO> allNotesResponse = new ArrayList<>();
 
         for (Note note : allNotesConfidential) {

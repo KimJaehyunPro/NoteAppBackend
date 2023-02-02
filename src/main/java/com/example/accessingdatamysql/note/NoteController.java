@@ -37,11 +37,11 @@ public class NoteController {
         return new GetNoteByTitleResponseDTO(note.getId(), note.getTitle(), note.getContent(), note.getTags());
     }
 
-//    @GetMapping("/randomNoteId")
-//    public RandomNoteIdResponseDTO getRandomNoteId() {
-//        return noteService.getRandomNoteId();
-//    }
-//
+    @GetMapping("/randomNoteId")
+    public RandomNoteIdResponseDTO getRandomNoteId() {
+        return noteService.getRandomNoteId();
+    }
+
 //    @PostMapping("/getSomeNotes")
 //    public List<GetSomeNotesResponseDTO> getSomeNotes(
 //            @RequestBody
