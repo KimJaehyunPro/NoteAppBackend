@@ -3,6 +3,10 @@ package com.example.accessingdatamysql.note;
 import com.example.accessingdatamysql.note.DTO.*;
 import com.example.accessingdatamysql.tag.Tag;
 import com.example.accessingdatamysql.tag.TagService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -56,7 +60,8 @@ public class NoteService {
 
     public List<GetAllNoteResponseDTO> getAllNotes() {
 
-        List<Note> allNotesConfidential = noteRepository.findAllByOrderByIdDesc();
+        Pageable pageable = PageRequest.of(0, 5, Sort.by("Id").descending());
+        Page<Note> allNotesConfidential = noteRepository.findAll(pageable);
 
         List<GetAllNoteResponseDTO> allNotesResponse = new ArrayList<>();
 

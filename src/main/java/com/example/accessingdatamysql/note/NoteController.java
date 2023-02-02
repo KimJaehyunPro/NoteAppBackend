@@ -2,6 +2,7 @@ package com.example.accessingdatamysql.note;
 
 import com.example.accessingdatamysql.note.DTO.*;
 import com.example.accessingdatamysql.tag.TagService;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

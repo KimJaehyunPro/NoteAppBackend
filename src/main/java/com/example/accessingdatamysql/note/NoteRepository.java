@@ -1,10 +1,12 @@
 package com.example.accessingdatamysql.note;
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 import java.util.Optional;
 
-public interface NoteRepository extends CrudRepository<Note, Integer> {
+public interface NoteRepository extends JpaRepository<Note, Integer> {
     Optional<Note> findNoteByTitle(String tagName);
-    List<Note> findAllByOrderByIdDesc();
+    Page<Note> findAll(Pageable pageable);
 }
