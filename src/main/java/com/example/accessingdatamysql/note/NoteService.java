@@ -121,4 +121,10 @@ public class NoteService {
 
         return new DeleteNoteResponseDTO(noteId);
     }
+
+    public Page<Note> findAll(
+            Pageable pageable
+    ) {
+        return noteRepository.findAll(pageable);
+    }
 }

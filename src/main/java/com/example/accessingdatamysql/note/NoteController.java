@@ -2,14 +2,18 @@ package com.example.accessingdatamysql.note;
 
 import com.example.accessingdatamysql.note.DTO.*;
 import com.example.accessingdatamysql.tag.TagService;
-import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 
 import java.util.List;
 
 @RestController
 @CrossOrigin(origins = "*")
-@RequestMapping("/note")
+@RequestMapping("/notes")
 public class NoteController {
 
     public final NoteService noteService;
@@ -85,6 +89,13 @@ public class NoteController {
             UpdateNoteRequestDTO updateNoteRequestDTO
     ) {
         return noteService.updateNote(updateNoteRequestDTO);
+    }
+
+    @GetMapping("/foo")
+    public Page<Note> findAll(
+            @PageableDefault(value = 5, page = 0, sort = "id", direction = Sort.Direction.DESC)
+            Pageable pageable) {
+        return noteService.findAll(pageable);
     }
 
 }
