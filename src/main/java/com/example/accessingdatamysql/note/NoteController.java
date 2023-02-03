@@ -13,7 +13,7 @@ import java.util.List;
 
 @RestController
 @CrossOrigin(origins = "*")
-@RequestMapping("/notes")
+@RequestMapping("/note")
 public class NoteController {
 
     public final NoteService noteService;
