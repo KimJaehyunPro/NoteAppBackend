@@ -40,8 +40,14 @@ public class NoteController {
             @PathVariable
             Integer id
     ) {
-        noteService.findById(id);
-        return null;
+        Note note = noteService.findById(id);
+
+        return new NoteResponseDTO(
+                note.getId(),
+                note.getTitle(),
+                note.getContent(),
+                tagService.convertTagSetToStringList(note.getTags())
+        );
     }
 
     @GetMapping("/randomNoteId")
