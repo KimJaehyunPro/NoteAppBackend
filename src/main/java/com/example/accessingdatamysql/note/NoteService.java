@@ -120,28 +120,48 @@ public class NoteService {
         return randomNoteId;
     }
 
-    public UpdateNoteResponseDTO updateNote(
-            UpdateNoteRequestDTO updateNoteRequestDTO
+    public Note updateNote(
+            Integer id,
+            NoteRequestDTO noteRequestDTO
     ) {
-        Integer noteId = updateNoteRequestDTO.getNoteId();
-
-        Optional<Note> optional = noteRepository.findById(noteId);
-        if (optional.isEmpty()) {
+        Optional<Note> noteOptional = noteRepository.findById(id);
+        if (noteOptional.isEmpty()) {
             return null;
         }
 
-        Note originalNote = optional.get();
+        Note originalNote = noteOptional.get();
 
-        originalNote.setTitle(updateNoteRequestDTO.getTitle());
-        originalNote.setContent(updateNoteRequestDTO.getContent());
+        originalNote.setTitle(noteRequestDTO.getTitle());
+        originalNote.setContent(noteRequestDTO.getContent());
 
-        Set<Tag> retrievedTags = tagService.getOrCreateTags(updateNoteRequestDTO.getTagNames());
-        originalNote.setTags(retrievedTags);
+        Set<Tag> newTags = tagService.getOrCreateTags(noteRequestDTO.getTags());
+        originalNote.setTags(newTags);
 
-        Note editedNote = noteRepository.save(originalNote);
-
-        return new UpdateNoteResponseDTO(editedNote.getId(), editedNote.getTitle(), editedNote.getContent(), tagService.convertTagSetToStringList(retrievedTags));
+        return noteRepository.save(originalNote);
     }
+
+//    public UpdateNoteResponseDTO updateNote(
+//            UpdateNoteRequestDTO updateNoteRequestDTO
+//    ) {
+//        Integer noteId = updateNoteRequestDTO.getNoteId();
+//
+//        Optional<Note> optional = noteRepository.findById(noteId);
+//        if (optional.isEmpty()) {
+//            return null;
+//        }
+//
+//        Note originalNote = optional.get();
+//
+//        originalNote.setTitle(updateNoteRequestDTO.getTitle());
+//        originalNote.setContent(updateNoteRequestDTO.getContent());
+//
+//        Set<Tag> retrievedTags = tagService.getOrCreateTags(updateNoteRequestDTO.getTagNames());
+//        originalNote.setTags(retrievedTags);
+//
+//        Note editedNote = noteRepository.save(originalNote);
+//
+//        return new UpdateNoteResponseDTO(editedNote.getId(), editedNote.getTitle(), editedNote.getContent(), tagService.convertTagSetToStringList(retrievedTags));
+//    }
 
     public DeleteNoteResponseDTO deleteNote(
             DeleteNoteRequestDTO deleteNoteRequestDTO

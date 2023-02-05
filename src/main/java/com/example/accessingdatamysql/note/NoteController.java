@@ -84,7 +84,16 @@ public class NoteController {
             @RequestBody
             NoteRequestDTO noteRequestDTO
     ) {
-        return null;
+        Note updatedNote = noteService.updateNote(id, noteRequestDTO);
+
+        NoteResponseDTO noteResponseDTO = new NoteResponseDTO(
+                updatedNote.getId(),
+                updatedNote.getTitle(),
+                updatedNote.getContent(),
+                tagService.convertTagSetToStringList(updatedNote.getTags())
+        );
+
+        return noteResponseDTO;
     }
 
     @DeleteMapping("/{id}")
