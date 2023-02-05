@@ -22,10 +22,40 @@ public class NoteService {
         this.tagService = tagService;
     }
 
-    public Note findById(
-            Integer noteId
+    public List<Note> getNotesList(
+            Pageable pageable
     ) {
-        Optional<Note> noteOptional = noteRepository.findById(noteId);
+        return getNotesPage(pageable).toList();
+    }
+
+    public Page<Note> getNotesPage(
+            Pageable pageable
+    ) {
+        return noteRepository.findAll(pageable);
+    }
+
+    public List<NoteResponseDTO> notesListToNoteResponseDTOsList(
+            List<Note> notesList
+    ) {
+        List<NoteResponseDTO> noteResponseDTOList = new ArrayList<>();
+
+        for (Note note : notesList) {
+            NoteResponseDTO NoteResponseDTO = new NoteResponseDTO(
+                    note.getId(),
+                    note.getTitle(),
+                    note.getContent(),
+                    tagService.convertTagSetToStringList(note.getTags()));
+            noteResponseDTOList.add(NoteResponseDTO);
+        }
+        return noteResponseDTOList;
+    }
+
+
+
+    public Note findById(
+            Integer id
+    ) {
+        Optional<Note> noteOptional = noteRepository.findById(id);
 
         Note note = noteOptional.get();
         return note;
@@ -42,7 +72,7 @@ public class NoteService {
     public Note createNote(
             String title,
             String content,
-            List<String> tagNames
+            List<String> tagList
     ) {
 
         Note newNote = new Note();
@@ -50,8 +80,8 @@ public class NoteService {
         newNote.setContent(content);
 
         // Get all the tags
-        Set<Tag> tags = tagService.getOrCreateTags(tagNames);
-        newNote.setTags(tags);
+        Set<Tag> tagSet = tagService.getOrCreateTags(tagList);
+        newNote.setTags(tagSet);
 
         Note createdNote = noteRepository.save(newNote);
 
@@ -73,7 +103,7 @@ public class NoteService {
         return allNotesResponse;
     }
 
-    public RandomNoteIdResponseDTO getRandomNoteId() {
+    public Integer getRandomNoteId() {
 
         Iterable<Note> allNotesConfidential = noteRepository.findAll();
         List<Integer> allNoteIds = new ArrayList<>();
@@ -87,7 +117,7 @@ public class NoteService {
 
         Integer randomNoteId = allNoteIds.get(random.nextInt(allNoteIds.size()));
 
-        return new RandomNoteIdResponseDTO(randomNoteId);
+        return randomNoteId;
     }
 
     public UpdateNoteResponseDTO updateNote(

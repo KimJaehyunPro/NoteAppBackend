@@ -75,14 +75,7 @@ public class TagService {
     }
 
     public List<String> convertTagSetToStringList(Set<Tag> tagSet) {
-
-        List<String> tagStringList = new ArrayList<>();
-
-        for (Tag tag : tagSet) {
-            tagStringList.add(tag.getTagName());
-        }
-
-        return tagStringList;
+        return tagSet.stream().map(tag -> tag.getTagName()).toList();
     }
 
     public Set<Tag> convertStringListToTagSet(List<String> TagStringList) {
