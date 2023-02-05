@@ -4,11 +4,10 @@ import com.example.accessingdatamysql.note.DTO.*;
 import com.example.accessingdatamysql.tag.Tag;
 import com.example.accessingdatamysql.tag.TagService;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import javax.swing.text.html.Option;
 import java.util.*;
 
 @Service
@@ -50,21 +49,11 @@ public class NoteService {
         return noteResponseDTOList;
     }
 
-
-
     public Note findById(
             Integer id
     ) {
         Optional<Note> noteOptional = noteRepository.findById(id);
 
-        Note note = noteOptional.get();
-        return note;
-    }
-
-    public Note findByTitle(
-            String title
-    ) {
-        Optional<Note> noteOptional = noteRepository.findNoteByTitle(title);
         Note note = noteOptional.get();
         return note;
     }
@@ -86,21 +75,6 @@ public class NoteService {
         Note createdNote = noteRepository.save(newNote);
 
         return createdNote;
-    }
-
-    public List<GetAllNoteResponseDTO> getAllNotes() {
-
-        Pageable pageable = PageRequest.of(0, 5, Sort.by("Id").descending());
-        Page<Note> allNotesConfidential = noteRepository.findAll(pageable);
-
-        List<GetAllNoteResponseDTO> allNotesResponse = new ArrayList<>();
-
-        for (Note note : allNotesConfidential) {
-            GetAllNoteResponseDTO getAllNoteResponseDTO = new GetAllNoteResponseDTO(note.getId(), note.getTitle(), note.getContent(), note.getTags());
-            allNotesResponse.add(getAllNoteResponseDTO);
-        }
-
-        return allNotesResponse;
     }
 
     public Integer getRandomNoteId() {
@@ -140,41 +114,14 @@ public class NoteService {
         return noteRepository.save(originalNote);
     }
 
-//    public UpdateNoteResponseDTO updateNote(
-//            UpdateNoteRequestDTO updateNoteRequestDTO
-//    ) {
-//        Integer noteId = updateNoteRequestDTO.getNoteId();
-//
-//        Optional<Note> optional = noteRepository.findById(noteId);
-//        if (optional.isEmpty()) {
-//            return null;
-//        }
-//
-//        Note originalNote = optional.get();
-//
-//        originalNote.setTitle(updateNoteRequestDTO.getTitle());
-//        originalNote.setContent(updateNoteRequestDTO.getContent());
-//
-//        Set<Tag> retrievedTags = tagService.getOrCreateTags(updateNoteRequestDTO.getTagNames());
-//        originalNote.setTags(retrievedTags);
-//
-//        Note editedNote = noteRepository.save(originalNote);
-//
-//        return new UpdateNoteResponseDTO(editedNote.getId(), editedNote.getTitle(), editedNote.getContent(), tagService.convertTagSetToStringList(retrievedTags));
-//    }
-
-    public DeleteNoteResponseDTO deleteNote(
-            DeleteNoteRequestDTO deleteNoteRequestDTO
+    public boolean deleteNoteById(
+            Integer id
     ) {
-        Integer noteId = deleteNoteRequestDTO.getNoteId();
-        noteRepository.deleteById(noteId);
-
-        return new DeleteNoteResponseDTO(noteId);
-    }
-
-    public Page<Note> findAll(
-            Pageable pageable
-    ) {
-        return noteRepository.findAll(pageable);
+        Optional<Note> noteToDelete = noteRepository.findById(id);
+        if (noteToDelete.isPresent()) {
+            noteRepository.deleteById(id);
+            return true;
+        }
+        return false;
     }
 }
