@@ -39,6 +39,11 @@ public class NoteController {
     ) {
         Note note = noteService.findById(id);
 
+        boolean noteIsNull = (note == null ? true : false);
+        if (noteIsNull) {
+            return null;
+        }
+
         return new NoteResponseDTO(
                 note.getId(),
                 note.getTitle(),

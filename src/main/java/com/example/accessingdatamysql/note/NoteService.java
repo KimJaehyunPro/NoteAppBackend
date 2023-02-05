@@ -54,8 +54,11 @@ public class NoteService {
     ) {
         Optional<Note> noteOptional = noteRepository.findById(id);
 
-        Note note = noteOptional.get();
-        return note;
+        if (noteOptional.isPresent()) {
+            return noteOptional.get();
+        }
+
+        return null;
     }
 
     public Note createNote(
