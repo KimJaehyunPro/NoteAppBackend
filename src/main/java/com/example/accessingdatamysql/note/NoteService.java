@@ -19,6 +19,18 @@ public class NoteService {
         this.noteRepository = noteRepository;
         this.tagService = tagService;
     }
+    /**
+     * Searches Notes that contain 'query' in either title or content.
+     * @param query a String, Case-insensitive
+     * @param pageable a Pageable
+     * @return Page of Notes
+     */
+    public Page<Note> search(
+            String query,
+            Pageable pageable
+    ) {
+        return noteRepository.findByTitleContainingOrContentContaining(query, query, pageable);
+    }
 
     public Page<Note> getNotesPage(
             Pageable pageable

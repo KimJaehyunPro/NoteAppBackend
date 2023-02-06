@@ -24,6 +24,16 @@ public class NoteController {
         this.tagService = tagService;
     }
 
+    @GetMapping("/search")
+    public Page<NoteResponseDTO> search(
+            @RequestParam(required = true)
+            String query,
+            @PageableDefault(page = 0, size = 5, sort = "id", direction = Sort.Direction.DESC)
+            Pageable pageable
+    ) {
+        return noteService.toNoteResponseDTOsPage(noteService.search(query, pageable));
+    }
+
     @GetMapping("/")
     public Page<NoteResponseDTO> getNotes(
             @PageableDefault(page = 0, size = 5, sort = "id", direction = Sort.Direction.DESC)
