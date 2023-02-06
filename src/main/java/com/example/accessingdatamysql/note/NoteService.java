@@ -7,7 +7,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import javax.swing.text.html.Option;
 import java.util.*;
 
 @Service
@@ -16,21 +15,34 @@ public class NoteService {
     private final NoteRepository noteRepository;
     private final TagService tagService;
 
-    public NoteService(NoteRepository noteRepository, TagService tagService) {
+            public NoteService(NoteRepository noteRepository, TagService tagService) {
         this.noteRepository = noteRepository;
         this.tagService = tagService;
-    }
-
-    public List<Note> getNotesList(
-            Pageable pageable
-    ) {
-        return getNotesPage(pageable).toList();
     }
 
     public Page<Note> getNotesPage(
             Pageable pageable
     ) {
         return noteRepository.findAll(pageable);
+    }
+
+    public Page<NoteResponseDTO> toNoteResponseDTOsPage(
+            Page<Note> notesPage
+    ) {
+                return notesPage.map(this::toNoteResponseDTO);
+    }
+
+    public NoteResponseDTO toNoteResponseDTO(
+            Note note
+    ) {
+                NoteResponseDTO noteResponseDTO = new NoteResponseDTO(
+                        note.getId(),
+                        note.getTitle(),
+                        note.getContent(),
+                        tagService.convertTagSetToStringList(note.getTags())
+                );
+
+                return noteResponseDTO;
     }
 
     public List<NoteResponseDTO> notesListToNoteResponseDTOsList(
@@ -49,16 +61,10 @@ public class NoteService {
         return noteResponseDTOList;
     }
 
-    public Note findById(
+    public Optional<Note> findById(
             Integer id
     ) {
-        Optional<Note> noteOptional = noteRepository.findById(id);
-
-        if (noteOptional.isPresent()) {
-            return noteOptional.get();
-        }
-
-        return null;
+        return noteRepository.findById(id);
     }
 
     public Note createNote(
@@ -80,21 +86,8 @@ public class NoteService {
         return createdNote;
     }
 
-    public Integer getRandomNoteId() {
-
-        Iterable<Note> allNotesConfidential = noteRepository.findAll();
-        List<Integer> allNoteIds = new ArrayList<>();
-
-        for (Note note : allNotesConfidential) {
-            Integer randomNoteId = note.getId();
-            allNoteIds.add(randomNoteId);
-        }
-
-        Random random = new Random();
-
-        Integer randomNoteId = allNoteIds.get(random.nextInt(allNoteIds.size()));
-
-        return randomNoteId;
+    public Note getRandomNote() {
+        return null;
     }
 
     public Note updateNote(

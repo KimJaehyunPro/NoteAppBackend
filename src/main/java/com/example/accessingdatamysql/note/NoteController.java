@@ -3,12 +3,13 @@ package com.example.accessingdatamysql.note;
 import com.example.accessingdatamysql.note.DTO.NoteRequestDTO;
 import com.example.accessingdatamysql.note.DTO.NoteResponseDTO;
 import com.example.accessingdatamysql.tag.TagService;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import java.util.Optional;
 
 @RestController
 @CrossOrigin(origins = "*")
@@ -24,12 +25,13 @@ public class NoteController {
     }
 
     @GetMapping("/")
-    public List<NoteResponseDTO> getNotes(
+    public Page<NoteResponseDTO> getNotes(
             @PageableDefault(page = 0, size = 5, sort = "id", direction = Sort.Direction.DESC)
             Pageable pageable
     ) {
-        List<NoteResponseDTO> noteResponseDTOList = noteService.notesListToNoteResponseDTOsList(noteService.getNotesList(pageable));
-        return noteResponseDTOList;
+        Page<Note> notePage = noteService.getNotesPage(pageable);
+
+        return noteService.toNoteResponseDTOsPage(notePage);
     }
 
     @GetMapping("/{id}")
@@ -37,24 +39,14 @@ public class NoteController {
             @PathVariable
             Integer id
     ) {
-        Note note = noteService.findById(id);
+        Optional<Note> noteOptional = noteService.findById(id);
 
-        boolean noteIsNull = (note == null ? true : false);
-        if (noteIsNull) {
-            return null;
-        }
-
-        return new NoteResponseDTO(
-                note.getId(),
-                note.getTitle(),
-                note.getContent(),
-                tagService.convertTagSetToStringList(note.getTags())
-        );
+        return noteOptional.map(noteService::toNoteResponseDTO).orElse(null);
     }
 
     @GetMapping("/randomNoteId")
-    public Integer getRandomNoteId() {
-        return noteService.getRandomNoteId();
+    public NoteResponseDTO getRandomNoteId() {
+        return noteService.toNoteResponseDTO(noteService.getRandomNote());
     }
 
     @PostMapping("/")
@@ -69,14 +61,7 @@ public class NoteController {
                 noteRequestDTO.getTags()
         );
 
-        NoteResponseDTO noteResponseDTO = new NoteResponseDTO(
-                createdNote.getId(),
-                createdNote.getTitle(),
-                createdNote.getContent(),
-                tagService.convertTagSetToStringList(createdNote.getTags())
-        );
-
-        return noteResponseDTO;
+        return noteService.toNoteResponseDTO(createdNote);
     }
 
     @PutMapping("/{id}")
@@ -88,14 +73,7 @@ public class NoteController {
     ) {
         Note updatedNote = noteService.updateNote(id, noteRequestDTO);
 
-        NoteResponseDTO noteResponseDTO = new NoteResponseDTO(
-                updatedNote.getId(),
-                updatedNote.getTitle(),
-                updatedNote.getContent(),
-                tagService.convertTagSetToStringList(updatedNote.getTags())
-        );
-
-        return noteResponseDTO;
+        return noteService.toNoteResponseDTO(updatedNote);
     }
 
     @DeleteMapping("/{id}")
