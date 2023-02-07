@@ -15,7 +15,7 @@ public class NoteService {
     private final NoteRepository noteRepository;
     private final TagService tagService;
 
-            public NoteService(NoteRepository noteRepository, TagService tagService) {
+    public NoteService(NoteRepository noteRepository, TagService tagService) {
         this.noteRepository = noteRepository;
         this.tagService = tagService;
     }
@@ -25,28 +25,19 @@ public class NoteService {
      * @param pageable a Pageable
      * @return Page of Notes
      */
-    public Page<Note> search(
-            String query,
-            Pageable pageable
-    ) {
+    public Page<Note> search(String query, Pageable pageable) {
         return noteRepository.findByTitleContainingOrContentContaining(query, query, pageable);
     }
 
-    public Page<Note> getNotesPage(
-            Pageable pageable
-    ) {
+    public Page<Note> getNotesPage(Pageable pageable) {
         return noteRepository.findAll(pageable);
     }
 
-    public Page<NoteResponseDTO> toNoteResponseDTOsPage(
-            Page<Note> notesPage
-    ) {
+    public Page<NoteResponseDTO> toNoteResponseDTOsPage(Page<Note> notesPage) {
                 return notesPage.map(this::toNoteResponseDTO);
     }
 
-    public NoteResponseDTO toNoteResponseDTO(
-            Note note
-    ) {
+    public NoteResponseDTO toNoteResponseDTO(Note note) {
                 NoteResponseDTO noteResponseDTO = new NoteResponseDTO(
                         note.getId(),
                         note.getTitle(),
@@ -57,9 +48,7 @@ public class NoteService {
                 return noteResponseDTO;
     }
 
-    public List<NoteResponseDTO> notesListToNoteResponseDTOsList(
-            List<Note> notesList
-    ) {
+    public List<NoteResponseDTO> notesListToNoteResponseDTOsList(List<Note> notesList) {
         List<NoteResponseDTO> noteResponseDTOList = new ArrayList<>();
 
         for (Note note : notesList) {
@@ -73,24 +62,15 @@ public class NoteService {
         return noteResponseDTOList;
     }
 
-    public Optional<Note> findById(
-            Integer id
-    ) {
+    public Optional<Note> findById(Integer id) {
         return noteRepository.findById(id);
     }
 
-    public Page<Note> findAllByTag(
-            String query,
-            Pageable pageable
-    ) {
+    public Page<Note> findAllByTag(String query, Pageable pageable) {
         return noteRepository.findAllByTag(query, pageable);
     }
 
-    public Note createNote(
-            String title,
-            String content,
-            List<String> tagList
-    ) {
+    public Note createNote(String title, String content, List<String> tagList) {
 
         Note newNote = new Note();
         newNote.setTitle(title);
@@ -109,10 +89,7 @@ public class NoteService {
         return null;
     }
 
-    public Note updateNote(
-            Integer id,
-            NoteRequestDTO noteRequestDTO
-    ) {
+    public Note updateNote(Integer id, NoteRequestDTO noteRequestDTO) {
         Optional<Note> noteOptional = noteRepository.findById(id);
         if (noteOptional.isEmpty()) {
             return null;
@@ -129,9 +106,7 @@ public class NoteService {
         return noteRepository.save(originalNote);
     }
 
-    public boolean deleteNoteById(
-            Integer id
-    ) {
+    public boolean deleteNoteById(Integer id) {
         Optional<Note> noteToDelete = noteRepository.findById(id);
         if (noteToDelete.isPresent()) {
             noteRepository.deleteById(id);
