@@ -25,11 +25,11 @@ public class NoteService {
      * @param pageable a Pageable
      * @return Page of Notes
      */
-    public Page<Note> findByTitleOrContent(String query, Pageable pageable) {
-        return noteRepository.findByTitleContainingOrContentContaining(query, query, pageable);
+    public Page<Note> findAllByTitleOrContent(String query, Pageable pageable) {
+        return noteRepository.findAllByTitleContainingOrContentContaining(query, query, pageable);
     }
 
-    public Page<Note> getNotesPage(Pageable pageable) {
+    public Page<Note> findAll(Pageable pageable) {
         return noteRepository.findAll(pageable);
     }
 
