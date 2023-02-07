@@ -1,8 +1,8 @@
 package com.example.accessingdatamysql.tag;
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
 
-public interface TagRepository extends CrudRepository<Tag, Integer>{
+public interface TagRepository extends JpaRepository<Tag, Integer> {
     Optional<Tag> findByTagName(String tagName);
 }

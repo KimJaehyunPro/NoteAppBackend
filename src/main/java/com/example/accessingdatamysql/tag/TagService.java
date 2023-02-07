@@ -1,10 +1,7 @@
 package com.example.accessingdatamysql.tag;
 
-import com.example.accessingdatamysql.tag.DTO.CreateTagRequestDTO;
-import com.example.accessingdatamysql.tag.DTO.CreateTagResponseDTO;
 import com.example.accessingdatamysql.tag.DTO.DeleteTagRequestDTO;
 import com.example.accessingdatamysql.tag.DTO.DeleteTagResponseDTO;
-import com.example.accessingdatamysql.tag.DTO.GetAllTagsResponseDTO;
 
 import org.springframework.stereotype.Service;
 
@@ -24,13 +21,19 @@ public class TagService {
         Set<Tag> tags = new HashSet<>();
 
         for (String tagName : tagNames) {
-            Optional<Tag> optionalTag = tagRepository.findByTagName(tagName);
-            if (optionalTag.isPresent()) {
-                tags.add(optionalTag.get());
+            Optional<Tag> tagOptional = findByTagName(tagName);
+
+            Boolean tagIsPresent = (tagOptional.isPresent());
+            if (tagIsPresent) {
+                tags.add(tagOptional.get());
             }
         }
 
         return tags;
+    }
+
+    public Optional<Tag> findByTagName(String tagName) {
+        return tagRepository.findByTagName(tagName);
     }
 
     public List<Tag> getAllTags() {

@@ -79,6 +79,13 @@ public class NoteService {
         return noteRepository.findById(id);
     }
 
+    public Page<Note> findAllByTag(
+            String query,
+            Pageable pageable
+    ) {
+        return noteRepository.findAllByTag(query, pageable);
+    }
+
     public Note createNote(
             String title,
             String content,
