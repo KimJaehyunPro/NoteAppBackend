@@ -31,7 +31,7 @@ public class NoteController {
             @PageableDefault(page = 0, size = 5, sort = "id", direction = Sort.Direction.DESC)
             Pageable pageable
     ) {
-        return noteService.toNoteResponseDTOsPage(noteService.search(query, pageable));
+        return noteService.toNoteResponseDTOsPage(noteService.findByTitleOrContent(query, pageable));
     }
 
     @GetMapping("/search/tag")
