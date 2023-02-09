@@ -15,22 +15,6 @@ public class TagService {
         this.tagRepository = tagRepository;
     }
 
-    public Set<Tag> getTags(List<String> tagNames) {
-
-        Set<Tag> tags = new HashSet<>();
-
-        for (String tagName : tagNames) {
-            Optional<Tag> tagOptional = findByName(tagName);
-
-            Boolean tagIsPresent = (tagOptional.isPresent());
-            if (tagIsPresent) {
-                tags.add(tagOptional.get());
-            }
-        }
-
-        return tags;
-    }
-
     public TagResponseDTO toTagResponseDTO(Tag tag) {
         return new TagResponseDTO(tag.getId(), tag.getName());
     }
@@ -78,29 +62,6 @@ public class TagService {
             tagRepository.deleteById(id);
             return true;
         } else return false;
-    }
-
-//    public DeleteTagResponseDTO deleteTag(DeleteTagRequestDTO deleteTagRequestDTO) {
-//        Integer tagId = deleteTagRequestDTO.getTagId();
-//        tagRepository.deleteById(tagId);
-//
-//        return new DeleteTagResponseDTO(tagId);
-//    }
-
-    /**
-     * Convert a set of Tag into a list of Tag so that you can be used in response DTOs.
-     * @param tags a Set of Tags.
-     * @return List of strings of tags' name.
-     */
-    public List<String> getListOfTagNames(Set<Tag> tags) {
-
-        List<String> tagNamesStrings = new ArrayList<>();
-
-        for (Tag tag : tags) {
-            tagNamesStrings.add(tag.getName());
-        }
-
-        return tagNamesStrings;
     }
 
     public List<String> convertTagSetToStringList(Set<Tag> tagSet) {
