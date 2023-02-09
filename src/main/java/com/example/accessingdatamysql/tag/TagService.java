@@ -20,7 +20,7 @@ public class TagService {
         Set<Tag> tags = new HashSet<>();
 
         for (String tagName : tagNames) {
-            Optional<Tag> tagOptional = findByTagName(tagName);
+            Optional<Tag> tagOptional = findByName(tagName);
 
             Boolean tagIsPresent = (tagOptional.isPresent());
             if (tagIsPresent) {
@@ -35,7 +35,7 @@ public class TagService {
         return new TagResponseDTO(tag.getId(), tag.getName());
     }
 
-    public Optional<Tag> findByTagName(String tagName) {
+    public Optional<Tag> findByName(String tagName) {
         return tagRepository.findByName(tagName);
     }
 

@@ -1,6 +1,7 @@
 package com.example.accessingdatamysql.tag;
 
 import com.example.accessingdatamysql.tag.DTO.*;
+import jakarta.websocket.server.PathParam;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
@@ -38,6 +39,19 @@ public class TagController {
         Optional<Tag> tagOptional = tagService.findById(id);
         if (tagOptional.isEmpty()) return null;
         return tagService.toTagResponseDTO(tagOptional.get());
+    }
+
+    @GetMapping("/")
+    public TagResponseDTO getTagByName(
+            @RequestBody
+            TagRequestDTO tagRequestDTO
+    ) {
+
+        Optional<Tag> tagOptional = tagService.findByName(tagRequestDTO.getName());
+        if (tagOptional.isEmpty()) return null;
+
+        Tag tag = tagOptional.get();
+        return tagService.toTagResponseDTO(tag);
     }
 
     @PostMapping("/")
