@@ -72,6 +72,14 @@ public class TagService {
         return tagRepository.save(tag);
     }
 
+    public Boolean deleteTagById(Integer id) {
+        Optional<Tag> tagOptional = tagRepository.findById(id);
+        if (tagOptional.isPresent()){
+            tagRepository.deleteById(id);
+            return true;
+        } else return false;
+    }
+
 //    public DeleteTagResponseDTO deleteTag(DeleteTagRequestDTO deleteTagRequestDTO) {
 //        Integer tagId = deleteTagRequestDTO.getTagId();
 //        tagRepository.deleteById(tagId);

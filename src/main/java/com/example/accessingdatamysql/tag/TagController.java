@@ -79,7 +79,7 @@ public class TagController {
             @PathVariable
             Integer id
     ) {
-        return null;
+        return tagService.deleteTagById(id);
     }
 
 //    @PostMapping("/create")
