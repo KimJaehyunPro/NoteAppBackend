@@ -3,8 +3,6 @@ package com.example.accessingdatamysql.tag;
 import com.example.accessingdatamysql.tag.DTO.*;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -18,18 +16,18 @@ public class TagController {
         this.tagService = tagService;
     }
 
-    @GetMapping("/all")
-    public List<GetAllTagsResponseDTO> getAllTags() {
-
-        List<GetAllTagsResponseDTO> allTagsResponse = new ArrayList<>();
-
-        List<Tag> allTags = tagService.getAllTags();
-        for (Tag tag : allTags){
-            GetAllTagsResponseDTO getAllTagsResponseDTO = new GetAllTagsResponseDTO(tag.getId(), tag.getTagName());
-            allTagsResponse.add(getAllTagsResponseDTO);
-        }
-        return allTagsResponse;
-    }
+//    @GetMapping("/all")
+//    public List<GetAllTagsResponseDTO> getAllTags() {
+//
+//        List<GetAllTagsResponseDTO> allTagsResponse = new ArrayList<>();
+//
+//        List<Tag> allTags = tagService.getAllTags();
+//        for (Tag tag : allTags){
+//            GetAllTagsResponseDTO getAllTagsResponseDTO = new GetAllTagsResponseDTO(tag.getId(), tag.getName());
+//            allTagsResponse.add(getAllTagsResponseDTO);
+//        }
+//        return allTagsResponse;
+//    }
 
 
     @GetMapping("/{id}")
@@ -47,7 +45,8 @@ public class TagController {
             @RequestBody
             TagRequestDTO tagRequestDTO
     ) {
-        return null;
+        Tag createdTag = tagService.createTag(tagRequestDTO.getName());
+        return tagService.toTagResponseDTO(createdTag);
     }
 
     @PutMapping("/{id}")

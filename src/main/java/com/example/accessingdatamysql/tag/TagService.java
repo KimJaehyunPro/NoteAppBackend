@@ -1,8 +1,5 @@
 package com.example.accessingdatamysql.tag;
 
-import com.example.accessingdatamysql.tag.DTO.DeleteTagRequestDTO;
-import com.example.accessingdatamysql.tag.DTO.DeleteTagResponseDTO;
-
 import com.example.accessingdatamysql.tag.DTO.TagResponseDTO;
 import org.springframework.stereotype.Service;
 
@@ -34,7 +31,7 @@ public class TagService {
     }
 
     public Optional<Tag> findByTagName(String tagName) {
-        return tagRepository.findByTagName(tagName);
+        return tagRepository.findByName(tagName);
     }
 
     public Optional<Tag> findById(Integer id) {
@@ -42,7 +39,7 @@ public class TagService {
     }
 
     public TagResponseDTO toTagResponseDTO(Tag tag) {
-        return new TagResponseDTO(tag.getId(), tag.getTagName());
+        return new TagResponseDTO(tag.getId(), tag.getName());
     }
 
     public List<Tag> getAllTags() {
@@ -55,20 +52,20 @@ public class TagService {
         return tagsList;
     }
 
-    public Tag createTag(String tagName) {
+    public Tag createTag(String name) {
         Tag tag = new Tag();
-        tag.setTagName(tagName);
-        Tag created = tagRepository.save(tag);
+        tag.setName(name);
+        Tag createdTag = tagRepository.save(tag);
 
-        return created;
+        return createdTag;
     }
 
-    public DeleteTagResponseDTO deleteTag(DeleteTagRequestDTO deleteTagRequestDTO) {
-        Integer tagId = deleteTagRequestDTO.getTagId();
-        tagRepository.deleteById(tagId);
-
-        return new DeleteTagResponseDTO(tagId);
-    }
+//    public DeleteTagResponseDTO deleteTag(DeleteTagRequestDTO deleteTagRequestDTO) {
+//        Integer tagId = deleteTagRequestDTO.getTagId();
+//        tagRepository.deleteById(tagId);
+//
+//        return new DeleteTagResponseDTO(tagId);
+//    }
 
     /**
      * Convert a set of Tag into a list of Tag so that you can be used in response DTOs.
@@ -80,14 +77,14 @@ public class TagService {
         List<String> tagNamesStrings = new ArrayList<>();
 
         for (Tag tag : tags) {
-            tagNamesStrings.add(tag.getTagName());
+            tagNamesStrings.add(tag.getName());
         }
 
         return tagNamesStrings;
     }
 
     public List<String> convertTagSetToStringList(Set<Tag> tagSet) {
-        return tagSet.stream().map(tag -> tag.getTagName()).toList();
+        return tagSet.stream().map(tag -> tag.getName()).toList();
     }
 
     public Set<Tag> convertStringListToTagSet(List<String> TagStringList) {
@@ -96,7 +93,7 @@ public class TagService {
 
         for (String tagString : tagStringList) {
             Tag tag = new Tag();
-            tag.setTagName(tagString);
+            tag.setName(tagString);
             tagSet.add(tag);
         }
 
@@ -120,12 +117,12 @@ public class TagService {
     }
 
     public Tag getOrCreateTag (String tagName) {
-        Optional<Tag> tag = tagRepository.findByTagName(tagName);
+        Optional<Tag> tag = tagRepository.findByName(tagName);
         if (tag.isPresent()) {
             return tag.get();
         } else {
             Tag tagToCreate = new Tag();
-            tagToCreate.setTagName(tagName);
+            tagToCreate.setName(tagName);
             Tag createdTag = tagRepository.save(tagToCreate);
             return createdTag;
         }
