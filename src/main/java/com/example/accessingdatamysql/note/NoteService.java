@@ -2,6 +2,7 @@ package com.example.accessingdatamysql.note;
 
 import com.example.accessingdatamysql.note.DTO.NoteRequestDTO;
 import com.example.accessingdatamysql.note.DTO.NoteResponseDTO;
+import com.example.accessingdatamysql.tag.DTO.TagResponseDTO;
 import com.example.accessingdatamysql.tag.Tag;
 import com.example.accessingdatamysql.tag.TagService;
 import org.springframework.data.domain.Page;
@@ -48,24 +49,10 @@ public class NoteService {
                 note.getId(),
                 note.getTitle(),
                 note.getContent(),
-                tagService.convertTagSetToStringList(note.getTags())
+                tagService.toTagResponseDTOList(note.getTags())
         );
 
         return noteResponseDTO;
-    }
-
-    public List<NoteResponseDTO> notesListToNoteResponseDTOsList(List<Note> notesList) {
-        List<NoteResponseDTO> noteResponseDTOList = new ArrayList<>();
-
-        for (Note note : notesList) {
-            NoteResponseDTO NoteResponseDTO = new NoteResponseDTO(
-                    note.getId(),
-                    note.getTitle(),
-                    note.getContent(),
-                    tagService.convertTagSetToStringList(note.getTags()));
-            noteResponseDTOList.add(NoteResponseDTO);
-        }
-        return noteResponseDTOList;
     }
 
     public Optional<Note> findById(Integer id) {
@@ -106,7 +93,8 @@ public class NoteService {
         originalNote.setTitle(noteRequestDTO.getTitle());
         originalNote.setContent(noteRequestDTO.getContent());
 
-        Set<Tag> newTags = tagService.getOrCreateTags(noteRequestDTO.getTags());
+        List<String> tagsToGetOrCreate = tagService.toStringList(noteRequestDTO.getTags());
+        Set<Tag> newTags = tagService.getOrCreateTags(tagsToGetOrCreate);
         originalNote.setTags(newTags);
 
         return noteRepository.save(originalNote);

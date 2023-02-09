@@ -64,23 +64,13 @@ public class TagService {
         } else return false;
     }
 
-    public List<String> convertTagSetToStringList(Set<Tag> tagSet) {
-        return tagSet.stream().map(tag -> tag.getName()).toList();
+    public List<TagResponseDTO> toTagResponseDTOList(Set<Tag> tagSet) {
+        return tagSet.stream().map(tag -> new TagResponseDTO(tag.getId(), tag.getName())).toList();
     }
 
-    public Set<Tag> convertStringListToTagSet(List<String> TagStringList) {
-        List<String> tagStringList = TagStringList;
-        Set<Tag> tagSet = new HashSet<>();
-
-        for (String tagString : tagStringList) {
-            Tag tag = new Tag();
-            tag.setName(tagString);
-            tagSet.add(tag);
-        }
-
-        return tagSet;
+    public List<String> toStringList(List<TagRequestDTO> tagRequestDTOList) {
+        return tagRequestDTOList.stream().map(TagRequestDTO::getName).toList();
     }
-
     /**
      * Get a list of tagNames, if it doesn't exist, create tag(s)
      * @param tagNames a list of tag names

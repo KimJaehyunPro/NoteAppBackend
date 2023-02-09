@@ -1,14 +1,16 @@
 package com.example.accessingdatamysql.note.DTO;
 
+import com.example.accessingdatamysql.tag.DTO.TagResponseDTO;
+
 import java.util.List;
 
 public class NoteResponseDTO {
     private Integer id;
     private String title;
     private String content;
-    private List<String> tags;
+    private List<TagResponseDTO> tags;
 
-    public NoteResponseDTO(Integer id, String title, String content, List<String> tags) {
+    public NoteResponseDTO(Integer id, String title, String content, List<TagResponseDTO> tags) {
         this.id = id;
         this.title = title;
         this.content = content;
@@ -39,11 +41,11 @@ public class NoteResponseDTO {
         this.content = content;
     }
 
-    public List<String> getTags() {
+    public List<TagResponseDTO> getTags() {
         return tags;
     }
 
-    public void setTags(List<String> tags) {
+    public void setTags(List<TagResponseDTO> tags) {
         this.tags = tags;
     }
 }

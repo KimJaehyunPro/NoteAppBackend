@@ -32,7 +32,6 @@ public class TagController {
             @RequestBody
             TagRequestDTO tagRequestDTO
     ) {
-
         Optional<Tag> tagOptional = tagService.findByName(tagRequestDTO.getName());
         if (tagOptional.isEmpty()) return null;
 

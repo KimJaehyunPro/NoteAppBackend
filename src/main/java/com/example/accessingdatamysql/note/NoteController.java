@@ -80,7 +80,7 @@ public class NoteController {
         Note createdNote = noteService.createNote(
                 noteRequestDTO.getTitle(),
                 noteRequestDTO.getContent(),
-                noteRequestDTO.getTags()
+                tagService.toStringList(noteRequestDTO.getTags())
         );
 
         return noteService.toNoteResponseDTO(createdNote);

@@ -1,11 +1,13 @@
 package com.example.accessingdatamysql.note.DTO;
 
+import com.example.accessingdatamysql.tag.DTO.TagRequestDTO;
+
 import java.util.List;
 
 public class NoteRequestDTO {
     private String title;
     private String content;
-    private List<String> tags;
+    private List<TagRequestDTO> tags;
 
     public String getTitle() {
         return title;
@@ -23,11 +25,11 @@ public class NoteRequestDTO {
         this.content = content;
     }
 
-    public List<String> getTags() {
+    public List<TagRequestDTO> getTags() {
         return tags;
     }
 
-    public void setTags(List<String> tags) {
+    public void setTags(List<TagRequestDTO> tags) {
         this.tags = tags;
     }
 }
