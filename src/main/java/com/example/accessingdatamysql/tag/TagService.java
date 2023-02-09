@@ -1,5 +1,7 @@
 package com.example.accessingdatamysql.tag;
 
+import com.example.accessingdatamysql.note.Note;
+import com.example.accessingdatamysql.note.NoteRepository;
 import com.example.accessingdatamysql.tag.DTO.TagRequestDTO;
 import com.example.accessingdatamysql.tag.DTO.TagResponseDTO;
 import org.springframework.stereotype.Service;
@@ -10,9 +12,11 @@ import java.util.*;
 public class TagService {
 
     private final TagRepository tagRepository;
+    private final NoteRepository noteRepository;
 
-    public TagService(TagRepository tagRepository) {
+    public TagService(TagRepository tagRepository, NoteRepository noteRepository) {
         this.tagRepository = tagRepository;
+        this.noteRepository = noteRepository;
     }
 
     public TagResponseDTO toTagResponseDTO(Tag tag) {
@@ -56,13 +60,25 @@ public class TagService {
         return tagRepository.save(tag);
     }
 
-    public Boolean deleteTagById(Integer id) {
+    public boolean deleteTagById(Integer id) {
+
         Optional<Tag> tagOptional = tagRepository.findById(id);
-        if (tagOptional.isPresent()){
-            tagRepository.deleteById(id);
-            return true;
-        } else return false;
+        if (tagOptional.isEmpty()) return false;
+        Tag tagToDelete = tagOptional.get();
+
+        //Delete the tag from all Notes that has that tag
+        Optional<List<Note>> relatedNotesListOptional = noteRepository.findAllByTag(tagToDelete.getName());
+        if (relatedNotesListOptional.isPresent()) {
+            List<Note> relatedNotesList = relatedNotesListOptional.get();
+            for (Note note : relatedNotesList) {
+                note.getTags().remove(tagToDelete);
+            }
+        }
+
+        tagRepository.deleteById(id);
+        return true;
     }
+
 
     public List<TagResponseDTO> toTagResponseDTOList(Set<Tag> tagSet) {
         return tagSet.stream().map(tag -> new TagResponseDTO(tag.getId(), tag.getName())).toList();
@@ -71,8 +87,10 @@ public class TagService {
     public List<String> toStringList(List<TagRequestDTO> tagRequestDTOList) {
         return tagRequestDTOList.stream().map(TagRequestDTO::getName).toList();
     }
+
     /**
      * Get a list of tagNames, if it doesn't exist, create tag(s)
+     *
      * @param tagNames a list of tag names
      * @return a set of created or exisiting tags
      */
@@ -87,7 +105,7 @@ public class TagService {
         return tagSet;
     }
 
-    public Tag getOrCreateTag (String tagName) {
+    public Tag getOrCreateTag(String tagName) {
         Optional<Tag> tag = tagRepository.findByName(tagName);
         if (tag.isPresent()) {
             return tag.get();
