@@ -3,6 +3,7 @@ package com.example.accessingdatamysql.tag;
 import com.example.accessingdatamysql.tag.DTO.DeleteTagRequestDTO;
 import com.example.accessingdatamysql.tag.DTO.DeleteTagResponseDTO;
 
+import com.example.accessingdatamysql.tag.DTO.TagResponseDTO;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -34,6 +35,14 @@ public class TagService {
 
     public Optional<Tag> findByTagName(String tagName) {
         return tagRepository.findByTagName(tagName);
+    }
+
+    public Optional<Tag> findById(Integer id) {
+        return tagRepository.findById(id);
+    }
+
+    public TagResponseDTO toTagResponseDTO(Tag tag) {
+        return new TagResponseDTO(tag.getId(), tag.getTagName());
     }
 
     public List<Tag> getAllTags() {
