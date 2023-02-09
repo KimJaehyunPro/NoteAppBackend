@@ -56,7 +56,8 @@ public class TagController {
             @RequestBody
             TagRequestDTO tagRequestDTO
     ) {
-        return null;
+        Tag updatedTag = tagService.updateTag(id, tagRequestDTO);
+        return tagService.toTagResponseDTO(updatedTag);
     }
 
     @DeleteMapping("/{id}")

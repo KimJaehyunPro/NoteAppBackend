@@ -1,13 +1,17 @@
 package com.example.accessingdatamysql.note;
 
-import com.example.accessingdatamysql.note.DTO.*;
+import com.example.accessingdatamysql.note.DTO.NoteRequestDTO;
+import com.example.accessingdatamysql.note.DTO.NoteResponseDTO;
 import com.example.accessingdatamysql.tag.Tag;
 import com.example.accessingdatamysql.tag.TagService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class NoteService {
@@ -19,9 +23,11 @@ public class NoteService {
         this.noteRepository = noteRepository;
         this.tagService = tagService;
     }
+
     /**
      * Searches Notes that contain 'query' in either title or content.
-     * @param query a String, Case-insensitive
+     *
+     * @param query    a String, Case-insensitive
      * @param pageable a Pageable
      * @return Page of Notes
      */
@@ -34,18 +40,18 @@ public class NoteService {
     }
 
     public Page<NoteResponseDTO> toNoteResponseDTOsPage(Page<Note> notesPage) {
-                return notesPage.map(this::toNoteResponseDTO);
+        return notesPage.map(this::toNoteResponseDTO);
     }
 
     public NoteResponseDTO toNoteResponseDTO(Note note) {
-                NoteResponseDTO noteResponseDTO = new NoteResponseDTO(
-                        note.getId(),
-                        note.getTitle(),
-                        note.getContent(),
-                        tagService.convertTagSetToStringList(note.getTags())
-                );
+        NoteResponseDTO noteResponseDTO = new NoteResponseDTO(
+                note.getId(),
+                note.getTitle(),
+                note.getContent(),
+                tagService.convertTagSetToStringList(note.getTags())
+        );
 
-                return noteResponseDTO;
+        return noteResponseDTO;
     }
 
     public List<NoteResponseDTO> notesListToNoteResponseDTOsList(List<Note> notesList) {

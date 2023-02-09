@@ -1,5 +1,6 @@
 package com.example.accessingdatamysql.tag;
 
+import com.example.accessingdatamysql.tag.DTO.TagRequestDTO;
 import com.example.accessingdatamysql.tag.DTO.TagResponseDTO;
 import org.springframework.stereotype.Service;
 
@@ -30,16 +31,16 @@ public class TagService {
         return tags;
     }
 
+    public TagResponseDTO toTagResponseDTO(Tag tag) {
+        return new TagResponseDTO(tag.getId(), tag.getName());
+    }
+
     public Optional<Tag> findByTagName(String tagName) {
         return tagRepository.findByName(tagName);
     }
 
     public Optional<Tag> findById(Integer id) {
         return tagRepository.findById(id);
-    }
-
-    public TagResponseDTO toTagResponseDTO(Tag tag) {
-        return new TagResponseDTO(tag.getId(), tag.getName());
     }
 
     public List<Tag> getAllTags() {
@@ -58,6 +59,17 @@ public class TagService {
         Tag createdTag = tagRepository.save(tag);
 
         return createdTag;
+    }
+
+    public Tag updateTag(Integer id, TagRequestDTO tagRequestDTO) {
+
+        Optional<Tag> tagOptional = tagRepository.findById(id);
+        if (tagOptional.isEmpty()) return null;
+
+        Tag tag = tagOptional.get();
+        tag.setName(tagRequestDTO.getName());
+
+        return tagRepository.save(tag);
     }
 
 //    public DeleteTagResponseDTO deleteTag(DeleteTagRequestDTO deleteTagRequestDTO) {
