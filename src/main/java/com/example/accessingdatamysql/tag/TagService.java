@@ -64,15 +64,11 @@ public class TagService {
 
         Optional<Tag> tagOptional = tagRepository.findById(id);
         if (tagOptional.isEmpty()) return false;
-        Tag tagToDelete = tagOptional.get();
 
         //Delete the tag from all Notes that has that tag
-        Optional<List<Note>> relatedNotesListOptional = noteRepository.findAllByTag(tagToDelete.getName());
-        if (relatedNotesListOptional.isPresent()) {
-            List<Note> relatedNotesList = relatedNotesListOptional.get();
-            for (Note note : relatedNotesList) {
-                note.getTags().remove(tagToDelete);
-            }
+        Tag tagToDelete = tagOptional.get();
+        for (Note note : tagToDelete.getNotes()) {
+            note.getTags().remove(tagToDelete);
         }
 
         tagRepository.deleteById(id);
