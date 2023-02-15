@@ -68,9 +68,9 @@ public class NoteController {
         return noteOptional.map(noteService::toNoteResponseDTO).orElse(null);
     }
 
-    @GetMapping("/randomNoteId")
-    public NoteResponseDTO getRandomNoteId() {
-        return noteService.toNoteResponseDTO(noteService.getRandomNote());
+    @GetMapping("/randomId")
+    public Integer getRandomId() {
+        return noteService.getRandomId();
     }
 
     @PostMapping("/")

@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 import java.util.Set;
 
 @Service
@@ -76,8 +77,15 @@ public class NoteService {
         return createdNote;
     }
 
-    public Note getRandomNote() {
-        return null;
+    public Integer getRandomId() {
+        // Get a list of all notes from repository
+        List<Note> notes = noteRepository.findAll();
+        // Get a random index from the list
+        Random random = new Random();
+        Integer randomIndex = random.nextInt(notes.size());
+
+        // Return the random index
+        return notes.get(randomIndex).getId();
     }
 
     public Note updateNote(Integer id, NoteRequestDTO noteRequestDTO) {
