@@ -26,14 +26,14 @@ public class NoteController {
         this.tagService = tagService;
     }
 
-    @GetMapping("/search/")
+    @GetMapping("/search")
     public Page<NoteResponseDTO> getNotePageByTitleOrContent(
-            @RequestParam(required = true)
+            @RequestParam(required = false)
             String query,
             @PageableDefault(page = 0, size = 5, sort = "id", direction = Sort.Direction.DESC)
             Pageable pageable
     ) {
-        return noteService.toNoteResponseDTOsPage(noteService.findAllByTitleOrContent(query, pageable));
+        return noteService.toNoteResponseDTOsPage(noteService.findNotes(query, pageable));
     }
 
     @GetMapping("/search/tag")
@@ -46,16 +46,6 @@ public class NoteController {
         Page<Note> notesPage = noteService.findAllByTag(query, pageable);
 
         return noteService.toNoteResponseDTOsPage(notesPage);
-    }
-
-    @GetMapping("/")
-    public Page<NoteResponseDTO> getNotePage(
-            @PageableDefault(page = 0, size = 5, sort = "id", direction = Sort.Direction.DESC)
-            Pageable pageable
-    ) {
-        Page<Note> notePage = noteService.findAll(pageable);
-
-        return noteService.toNoteResponseDTOsPage(notePage);
     }
 
     @GetMapping("/{id}")
