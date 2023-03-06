@@ -3,6 +3,7 @@ package com.example.accessingdatamysql.tag;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -21,6 +22,9 @@ public class Tag {
     @ManyToMany(mappedBy = "tags")
     @JsonBackReference
     private Set<Note> notes = new HashSet<>();
+
+    @Temporal(TemporalType.TIMESTAMP)
+    private LocalDateTime lastOpenTimestamp = LocalDateTime.now();
 
     public Integer getId() {
         return id;
@@ -44,5 +48,13 @@ public class Tag {
 
     public void setNotes(Set<Note> notes) {
         this.notes = notes;
+    }
+
+    public LocalDateTime getLastOpenTimestamp() {
+        return lastOpenTimestamp;
+    }
+
+    public void setLastOpenTimestamp(LocalDateTime lastOpenTimestamp) {
+        this.lastOpenTimestamp = lastOpenTimestamp;
     }
 }

@@ -53,9 +53,7 @@ public class NoteController {
             @PathVariable
             Integer id
     ) {
-        Optional<Note> noteOptional = noteService.findById(id);
-
-        return noteOptional.map(noteService::toNoteResponseDTO).orElse(null);
+        return noteService.getNote(id);
     }
 
     @GetMapping("/randomId")

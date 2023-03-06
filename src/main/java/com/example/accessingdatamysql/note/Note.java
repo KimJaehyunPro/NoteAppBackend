@@ -4,6 +4,7 @@ import com.example.accessingdatamysql.tag.Tag;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -18,6 +19,12 @@ public class Note {
 
     @Column(columnDefinition = "TEXT", length = 65535)
     private String content;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    private LocalDateTime creationTimestamp = LocalDateTime.now();
+
+    @Temporal(TemporalType.TIMESTAMP)
+    private LocalDateTime lastOpenTimestamp = LocalDateTime.now();
 
     @ManyToMany()
     @JoinTable(
@@ -50,6 +57,22 @@ public class Note {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    public LocalDateTime getCreationTimestamp() {
+        return creationTimestamp;
+    }
+
+    public void setCreationTimestamp(LocalDateTime creationTimestamp) {
+        this.creationTimestamp = creationTimestamp;
+    }
+
+    public LocalDateTime getLastOpenTimestamp() {
+        return lastOpenTimestamp;
+    }
+
+    public void setLastOpenTimestamp(LocalDateTime lastOpenTimestamp) {
+        this.lastOpenTimestamp = lastOpenTimestamp;
     }
 
     public Set<Tag> getTags() {

@@ -4,8 +4,11 @@ import com.example.accessingdatamysql.note.Note;
 import com.example.accessingdatamysql.note.NoteRepository;
 import com.example.accessingdatamysql.tag.DTO.TagRequestDTO;
 import com.example.accessingdatamysql.tag.DTO.TagResponseDTO;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Service
@@ -20,7 +23,7 @@ public class TagService {
     }
 
     public TagResponseDTO toTagResponseDTO(Tag tag) {
-        return new TagResponseDTO(tag.getId(), tag.getName());
+        return new TagResponseDTO(tag.getId(), tag.getName(), tag.getLastOpenTimestamp());
     }
 
     public Optional<Tag> findByName(String tagName) {
@@ -31,14 +34,13 @@ public class TagService {
         return tagRepository.findById(id);
     }
 
-    public List<Tag> getAllTags() {
-        List<Tag> tagsList = new ArrayList<>();
-        Iterable<Tag> tagsIterable = tagRepository.findAll();
+    public Page<Tag> findAll(Pageable pageable) {
+        return tagRepository.findAll(pageable);
+    }
 
-        tagsIterable.forEach(
-                tagsList::add
-        );
-        return tagsList;
+    public Tag updateLastOpenTimestamp (Tag tag) {
+        tag.setLastOpenTimestamp(LocalDateTime.now());
+        return tagRepository.save(tag);
     }
 
     public Tag createTag(String name) {
@@ -75,9 +77,12 @@ public class TagService {
         return true;
     }
 
-
     public List<TagResponseDTO> toTagResponseDTOList(Set<Tag> tagSet) {
-        return tagSet.stream().map(tag -> new TagResponseDTO(tag.getId(), tag.getName())).toList();
+        return tagSet.stream().map(tag -> new TagResponseDTO(tag.getId(), tag.getName(), tag.getLastOpenTimestamp())).toList();
+    }
+
+    public Page<TagResponseDTO> toTagResponseDTOsPage(Page<Tag> tagsPage) {
+        return tagsPage.map(this::toTagResponseDTO);
     }
 
     public List<String> toStringList(List<TagRequestDTO> tagRequestDTOList) {

@@ -8,6 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
@@ -32,6 +33,20 @@ public class NoteService {
      * @return Page of Notes
      */
 
+    public NoteResponseDTO getNote(Integer id) {
+
+        Optional<Note> noteOptional = findById(id);
+        if (noteOptional.isEmpty()) {
+            return null;
+        }
+
+        Note note = noteOptional.get();
+        note.setLastOpenTimestamp(LocalDateTime.now());
+        noteRepository.save(note);
+
+        return toNoteResponseDTO(note);
+    }
+
     public Page<Note> findNotes(String query, Pageable pageable) {
         if (query == null) {
             return findAll(pageable);
@@ -48,19 +63,21 @@ public class NoteService {
         return noteRepository.findAll(pageable);
     }
 
-    public Page<NoteResponseDTO> toNoteResponseDTOsPage(Page<Note> notesPage) {
-        return notesPage.map(this::toNoteResponseDTO);
-    }
-
     public NoteResponseDTO toNoteResponseDTO(Note note) {
         NoteResponseDTO noteResponseDTO = new NoteResponseDTO(
                 note.getId(),
                 note.getTitle(),
                 note.getContent(),
-                tagService.toTagResponseDTOList(note.getTags())
+                tagService.toTagResponseDTOList(note.getTags()),
+                note.getCreationTimestamp(),
+                note.getLastOpenTimestamp()
         );
 
         return noteResponseDTO;
+    }
+
+    public Page<NoteResponseDTO> toNoteResponseDTOsPage(Page<Note> notesPage) {
+        return notesPage.map(this::toNoteResponseDTO);
     }
 
     public Optional<Note> findById(Integer id) {
@@ -68,6 +85,13 @@ public class NoteService {
     }
 
     public Page<Note> findAllByTag(String query, Pageable pageable) {
+        Optional<Tag> tagOptional = tagService.findByName(query);
+
+        if (tagOptional.isPresent()) {
+            Tag tag = tagOptional.get();
+            tagService.updateLastOpenTimestamp(tag);
+        }
+
         return noteRepository.findAllByTag(query, pageable);
     }
 
