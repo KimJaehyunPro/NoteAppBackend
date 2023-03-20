@@ -46,10 +46,23 @@ public class NoteService {
         }
 
         Note note = noteOptional.get();
+
+        return toNoteResponseDTO(note);
+    }
+
+    @Transactional
+    public boolean UpdateLastOpenTimestamp(Integer id) {
+
+        Optional<Note> noteOptional = findById(id);
+        if (noteOptional.isEmpty()) {
+            return false;
+        }
+
+        Note note = noteOptional.get();
         note.setLastOpenTimestamp(LocalDateTime.now());
         noteRepository.save(note);
 
-        return toNoteResponseDTO(note);
+        return true;
     }
 
     public Page<Note> findNotes(String query, Pageable pageable) {

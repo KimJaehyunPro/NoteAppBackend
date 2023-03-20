@@ -56,6 +56,15 @@ public class NoteController {
         return noteService.getNote(id);
     }
 
+        @PutMapping("/updateLastOpenTimestamp/{id}")
+    public Boolean updateLastOpenTimestamp(
+            @PathVariable
+            Integer id
+    ) {
+        System.out.println("!!!!!");
+        return noteService.UpdateLastOpenTimestamp(id);
+    }
+
     @GetMapping("/randomId")
     public Integer getRandomId() {
         return noteService.getRandomId();
