@@ -8,12 +8,13 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 public interface NoteRepository extends JpaRepository<Note, Integer> {
     Page<Note> findAll(Pageable pageable);
     Page<Note> findAllByTitleContainingOrContentContaining(String title, String content, Pageable pageable);
     @Query("SELECT note FROM Note note JOIN note.tags tag WHERE tag.name = :tag")
-    Optional<List<Note>> findAllByTag(@Param("tag")String tag);
+    Set<Note> findAllByTag(@Param("tag")String tag);
     @Query("SELECT note FROM Note note JOIN note.tags tag WHERE tag.name = :tag")
     Page<Note> findAllByTag(@Param("tag")String tag, Pageable pageable);
 }

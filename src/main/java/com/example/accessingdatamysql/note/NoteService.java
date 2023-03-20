@@ -1,13 +1,17 @@
 package com.example.accessingdatamysql.note;
 
+import ch.qos.logback.core.pattern.parser.OptionTokenizer;
 import com.example.accessingdatamysql.note.DTO.NoteRequestDTO;
 import com.example.accessingdatamysql.note.DTO.NoteResponseDTO;
 import com.example.accessingdatamysql.tag.Tag;
 import com.example.accessingdatamysql.tag.TagService;
+import org.hibernate.Hibernate;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import javax.swing.text.html.Option;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -33,6 +37,7 @@ public class NoteService {
      * @return Page of Notes
      */
 
+    @Transactional
     public NoteResponseDTO getNote(Integer id) {
 
         Optional<Note> noteOptional = findById(id);
@@ -55,10 +60,12 @@ public class NoteService {
         }
     }
 
+    @Transactional
     public Page<Note> findAllByTitleOrContent(String query, Pageable pageable) {
         return noteRepository.findAllByTitleContainingOrContentContaining(query, query, pageable);
     }
 
+    @Transactional
     public Page<Note> findAll(Pageable pageable) {
         return noteRepository.findAll(pageable);
     }
@@ -80,10 +87,12 @@ public class NoteService {
         return notesPage.map(this::toNoteResponseDTO);
     }
 
+    @Transactional
     public Optional<Note> findById(Integer id) {
         return noteRepository.findById(id);
     }
 
+    @Transactional
     public Page<Note> findAllByTag(String query, Pageable pageable) {
         Optional<Tag> tagOptional = tagService.findByName(query);
 
@@ -95,6 +104,7 @@ public class NoteService {
         return noteRepository.findAllByTag(query, pageable);
     }
 
+    @Transactional
     public Note createNote(String title, String content, List<String> tagList) {
 
         Note newNote = new Note();
@@ -110,6 +120,7 @@ public class NoteService {
         return createdNote;
     }
 
+    @Transactional
     public Integer getRandomId() {
         // Get a list of all notes from repository
         List<Note> notes = noteRepository.findAll();
@@ -121,6 +132,7 @@ public class NoteService {
         return notes.get(randomIndex).getId();
     }
 
+    @Transactional
     public Note updateNote(Integer id, NoteRequestDTO noteRequestDTO) {
         Optional<Note> noteOptional = noteRepository.findById(id);
         if (noteOptional.isEmpty()) {
@@ -139,10 +151,21 @@ public class NoteService {
         return noteRepository.save(originalNote);
     }
 
+    @Transactional
     public boolean deleteNoteById(Integer id) {
         Optional<Note> noteToDelete = noteRepository.findById(id);
+
         if (noteToDelete.isPresent()) {
-            noteRepository.deleteById(id);
+            Set<Tag> tagsToCheck = noteToDelete.get().getTags();
+            noteRepository.delete(noteToDelete.get());
+
+            for (Tag tag : tagsToCheck) {
+                Set<Note> noteSet = noteRepository.findAllByTag(tag.getName());
+                if (noteSet.size() == 0) {
+                    tagService.deleteTagById(tag.getId());
+                }
+            }
+
             return true;
         }
         return false;
