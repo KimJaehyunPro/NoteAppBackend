@@ -3,6 +3,7 @@ package com.example.accessingdatamysql.note;
 import com.example.accessingdatamysql.note.DTO.NoteRequestDTO;
 import com.example.accessingdatamysql.note.DTO.NoteResponseDTO;
 import com.example.accessingdatamysql.tag.TagService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -21,6 +22,7 @@ public class NoteController {
     public final NoteService noteService;
     public final TagService tagService;
 
+    @Autowired
     public NoteController(NoteService noteService, TagService tagService) {
         this.noteService = noteService;
         this.tagService = tagService;

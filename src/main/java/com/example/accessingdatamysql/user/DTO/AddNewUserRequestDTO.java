@@ -1,14 +1,20 @@
 package com.example.accessingdatamysql.user.DTO;
 
+import jakarta.validation.constraints.NotEmpty;
+
 public class AddNewUserRequestDTO {
 
+    @NotEmpty
     private String username;
-    private String email;
 
-    public AddNewUserRequestDTO(String username, String email) {
-        this.username = username;
-        this.email = email;
-    }
+    @NotEmpty
+    private String password;
+
+    @NotEmpty
+    private String confirmation;
+
+    @NotEmpty
+    private String email;
 
     public String getUsername() {
         return username;
@@ -16,6 +22,22 @@ public class AddNewUserRequestDTO {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getConfirmation() {
+        return confirmation;
+    }
+
+    public void setConfirmation(String confirmation) {
+        this.confirmation = confirmation;
     }
 
     public String getEmail() {
