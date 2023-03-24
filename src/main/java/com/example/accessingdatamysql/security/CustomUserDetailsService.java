@@ -1,6 +1,6 @@
 package com.example.accessingdatamysql.security;
 
-import com.example.accessingdatamysql.user.Role;
+import com.example.accessingdatamysql.authentication.Role;
 import com.example.accessingdatamysql.user.UserEntity;
 import com.example.accessingdatamysql.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;

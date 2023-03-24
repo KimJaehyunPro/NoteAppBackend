@@ -1,9 +1,10 @@
-package com.example.accessingdatamysql.user.DTO;
+package com.example.accessingdatamysql.authentication.DTO;
 
 import lombok.Data;
 
 @Data
-public class LoginDTO {
+public class RegisterDTO {
     private String username;
     private String password;
+
 }

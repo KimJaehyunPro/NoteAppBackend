@@ -1,5 +1,6 @@
 package com.example.accessingdatamysql.user;
 
+import com.example.accessingdatamysql.authentication.Role;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;

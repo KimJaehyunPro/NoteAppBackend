@@ -1,7 +1,9 @@
-package com.example.accessingdatamysql.user;
+package com.example.accessingdatamysql.authentication;
 
-import com.example.accessingdatamysql.user.DTO.LoginDTO;
-import com.example.accessingdatamysql.user.DTO.RegisterDTO;
+import com.example.accessingdatamysql.authentication.DTO.LoginDTO;
+import com.example.accessingdatamysql.authentication.DTO.RegisterDTO;
+import com.example.accessingdatamysql.user.UserEntity;
+import com.example.accessingdatamysql.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
