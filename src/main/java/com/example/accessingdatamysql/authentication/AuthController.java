@@ -1,7 +1,9 @@
 package com.example.accessingdatamysql.authentication;
 
+import com.example.accessingdatamysql.authentication.DTO.AuthResponseDTO;
 import com.example.accessingdatamysql.authentication.DTO.LoginDTO;
 import com.example.accessingdatamysql.authentication.DTO.RegisterDTO;
+import com.example.accessingdatamysql.security.JWTGenerator;
 import com.example.accessingdatamysql.user.UserEntity;
 import com.example.accessingdatamysql.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,24 +29,33 @@ public class AuthController {
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
 
+    private JWTGenerator jwtGenerator;
+
     @Autowired
-    public AuthController(AuthenticationManager authenticationManager, UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder) {
+    public AuthController(
+            AuthenticationManager authenticationManager,
+            UserRepository userRepository,
+            RoleRepository roleRepository,
+            PasswordEncoder passwordEncoder,
+            JWTGenerator jwtGenerator) {
         this.authenticationManager = authenticationManager;
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
+        this.jwtGenerator = jwtGenerator;
     }
 
     @PostMapping("login")
-    public ResponseEntity<String> login(@RequestBody LoginDTO loginDTO) {
+    public ResponseEntity<AuthResponseDTO> login(@RequestBody LoginDTO loginDTO) {
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                 loginDTO.getUsername(),
                 loginDTO.getPassword()));
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
+        String token = jwtGenerator.generateToken(authentication);
 
-        return new ResponseEntity<>("User signed success!", HttpStatus.OK);
+        return new ResponseEntity<>(new AuthResponseDTO(token), HttpStatus.OK);
     }
 
     @PostMapping("register")
