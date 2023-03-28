@@ -10,6 +10,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Optional;
@@ -69,6 +70,7 @@ public class NoteController {
 
     @GetMapping("/randomId")
     public Integer getRandomId() {
+        String sessionId = RequestContextHolder.currentRequestAttributes().getSessionId();
         return noteService.getRandomId();
     }
 
