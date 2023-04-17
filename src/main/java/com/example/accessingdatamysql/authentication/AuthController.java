@@ -14,14 +14,12 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
 
 @RestController
+@CrossOrigin(origins = "*")
 @RequestMapping("/auth")
 public class AuthController {
     private final AuthenticationManager authenticationManager;
@@ -62,6 +60,10 @@ public class AuthController {
     public ResponseEntity<String> register(@RequestBody RegisterDTO registerDTO) {
         if (userRepository.existsByUsername(registerDTO.getUsername())) {
             return new ResponseEntity<>("Username is taken!", HttpStatus.BAD_REQUEST);
+        }
+
+        if (registerDTO.getPassword().equals(registerDTO.getConfirmation()) == false) {
+            return new ResponseEntity<>("Wrong confirmation. Check the password and type in correct confirmation.", HttpStatus.UNAUTHORIZED);
         }
 
         UserEntity user = new UserEntity();
