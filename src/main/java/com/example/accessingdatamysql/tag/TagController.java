@@ -20,6 +20,7 @@ public class TagController {
         this.tagService = tagService;
     }
 
+    @CrossOrigin(origins = "*")
     @GetMapping("/")
     public Page<TagResponseDTO> getTags(
             @PageableDefault(page = 0, size = 5, sort = "lastOpenTimestamp", direction = Sort.Direction.DESC)
