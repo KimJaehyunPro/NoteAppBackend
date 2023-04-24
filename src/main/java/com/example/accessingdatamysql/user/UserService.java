@@ -1,5 +1,6 @@
 package com.example.accessingdatamysql.user;
 import org.springframework.stereotype.Service;
+import java.util.Optional;
 
 @Service
 public class UserService {
@@ -7,6 +8,14 @@ public class UserService {
 
     public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
+    }
+
+    public Integer getId(String username) {
+        Optional<User> userIdOptional = userRepository.findUserByUsername(username);
+        if (userIdOptional.isPresent()) {
+            return userIdOptional.get().getId();
+        }
+        return null;
     }
 
 }

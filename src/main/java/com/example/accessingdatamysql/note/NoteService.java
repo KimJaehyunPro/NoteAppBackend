@@ -5,6 +5,8 @@ import com.example.accessingdatamysql.note.DTO.NoteRequestDTO;
 import com.example.accessingdatamysql.note.DTO.NoteResponseDTO;
 import com.example.accessingdatamysql.tag.Tag;
 import com.example.accessingdatamysql.tag.TagService;
+import com.example.accessingdatamysql.user.UserController;
+import jakarta.persistence.criteria.CriteriaBuilder;
 import org.hibernate.Hibernate;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -23,10 +25,12 @@ public class NoteService {
 
     private final NoteRepository noteRepository;
     private final TagService tagService;
+    private final UserController userController;
 
-    public NoteService(NoteRepository noteRepository, TagService tagService) {
+    public NoteService(NoteRepository noteRepository, TagService tagService, UserController userController) {
         this.noteRepository = noteRepository;
         this.tagService = tagService;
+        this.userController = userController;
     }
 
     /**
@@ -67,7 +71,8 @@ public class NoteService {
 
     public Page<Note> findNotes(String query, Pageable pageable, String username) {
         if (query == null) {
-            return findAll(pageable, username);
+            Integer userId = userController.getId(username);
+            return findAllByUserId(pageable, userId);
         } else {
             return findAllByTitleOrContent(query, pageable, username);
         }
@@ -79,8 +84,8 @@ public class NoteService {
     }
 
     @Transactional
-    public Page<Note> findAll(Pageable pageable, String username) {
-        return noteRepository.findAll(pageable);
+    public Page<Note> findAllByUserId(Pageable pageable, Integer userId) {
+        return noteRepository.findAllByUserId(pageable, userId);
     }
 
     public NoteResponseDTO toNoteResponseDTO(Note note) {
