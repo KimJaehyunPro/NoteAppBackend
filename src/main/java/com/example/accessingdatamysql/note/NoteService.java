@@ -10,6 +10,8 @@ import jakarta.persistence.criteria.CriteriaBuilder;
 import org.hibernate.Hibernate;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -69,18 +71,22 @@ public class NoteService {
         return true;
     }
 
-    public Page<Note> findNotes(String query, Pageable pageable, String username) {
+    public Page<Note> findNotes(String query, Pageable pageable) {
+
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String username = ((UserDetails)principal).getUsername();
+        Integer userId = userController.getId(username);
+
         if (query == null) {
-            Integer userId = userController.getId(username);
             return findAllByUserId(pageable, userId);
         } else {
-            return findAllByTitleOrContent(query, pageable, username);
+            return findAllByTitleOrContent(query, pageable, userId);
         }
     }
 
     @Transactional
-    public Page<Note> findAllByTitleOrContent(String query, Pageable pageable, String username) {
-        return noteRepository.findAllByTitleContainingOrContentContaining(query, query, pageable);
+    public Page<Note> findAllByTitleOrContent(String query, Pageable pageable, Integer userId) {
+        return noteRepository.findAllByTitleOrContent(query, pageable, userId);
     }
 
     @Transactional

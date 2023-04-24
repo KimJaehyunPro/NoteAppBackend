@@ -36,11 +36,7 @@ public class NoteController {
             @PageableDefault(page = 0, size = 5, sort = "id", direction = Sort.Direction.DESC)
             Pageable pageable
     ) {
-
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        String username = ((UserDetails)principal).getUsername();
-
-        return noteService.toNoteResponseDTOsPage(noteService.findNotes(query, pageable, username));
+        return noteService.toNoteResponseDTOsPage(noteService.findNotes(query, pageable));
     }
 
     @GetMapping("/search/tag")

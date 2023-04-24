@@ -11,7 +11,7 @@ public class UserService {
     }
 
     public Integer getId(String username) {
-        Optional<User> userIdOptional = userRepository.findUserByUsername(username);
+        Optional<User> userIdOptional = userRepository.findByUsername(username);
         if (userIdOptional.isPresent()) {
             return userIdOptional.get().getId();
         }
