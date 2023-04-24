@@ -4,7 +4,7 @@ import com.example.accessingdatamysql.authentication.DTO.AuthResponseDTO;
 import com.example.accessingdatamysql.authentication.DTO.LoginDTO;
 import com.example.accessingdatamysql.authentication.DTO.RegisterDTO;
 import com.example.accessingdatamysql.security.JWTGenerator;
-import com.example.accessingdatamysql.user.UserEntity;
+import com.example.accessingdatamysql.user.User;
 import com.example.accessingdatamysql.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -66,7 +66,7 @@ public class AuthController {
             return new ResponseEntity<>("Wrong confirmation. Check the password and type in correct confirmation.", HttpStatus.UNAUTHORIZED);
         }
 
-        UserEntity user = new UserEntity();
+        User user = new User();
         user.setUsername(registerDTO.getUsername());
         user.setPassword(passwordEncoder.encode(registerDTO.getPassword()));
 
