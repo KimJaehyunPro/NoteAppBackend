@@ -3,12 +3,15 @@ package com.example.accessingdatamysql.note;
 import com.example.accessingdatamysql.note.DTO.NoteRequestDTO;
 import com.example.accessingdatamysql.note.DTO.NoteResponseDTO;
 import com.example.accessingdatamysql.tag.TagService;
+import io.jsonwebtoken.Jwts;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.server.ResponseStatusException;
@@ -34,7 +37,11 @@ public class NoteController {
             @PageableDefault(page = 0, size = 5, sort = "id", direction = Sort.Direction.DESC)
             Pageable pageable
     ) {
-        return noteService.toNoteResponseDTOsPage(noteService.findNotes(query, pageable));
+
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String username = ((UserDetails)principal).getUsername();
+
+        return noteService.toNoteResponseDTOsPage(noteService.findNotes(query, pageable, username));
     }
 
     @GetMapping("/search/tag")
@@ -57,7 +64,7 @@ public class NoteController {
         return noteService.getNote(id);
     }
 
-        @PutMapping("/updateLastOpenTimestamp/{id}")
+    @PutMapping("/updateLastOpenTimestamp/{id}")
     public Boolean updateLastOpenTimestamp(
             @PathVariable
             Integer id

@@ -65,21 +65,21 @@ public class NoteService {
         return true;
     }
 
-    public Page<Note> findNotes(String query, Pageable pageable) {
+    public Page<Note> findNotes(String query, Pageable pageable, String username) {
         if (query == null) {
-            return findAll(pageable);
+            return findAll(pageable, username);
         } else {
-            return findAllByTitleOrContent(query, pageable);
+            return findAllByTitleOrContent(query, pageable, username);
         }
     }
 
     @Transactional
-    public Page<Note> findAllByTitleOrContent(String query, Pageable pageable) {
+    public Page<Note> findAllByTitleOrContent(String query, Pageable pageable, String username) {
         return noteRepository.findAllByTitleContainingOrContentContaining(query, query, pageable);
     }
 
     @Transactional
-    public Page<Note> findAll(Pageable pageable) {
+    public Page<Note> findAll(Pageable pageable, String username) {
         return noteRepository.findAll(pageable);
     }
 
