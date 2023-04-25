@@ -3,12 +3,16 @@ package com.example.accessingdatamysql.note;
 import com.example.accessingdatamysql.note.DTO.NoteRequestDTO;
 import com.example.accessingdatamysql.note.DTO.NoteResponseDTO;
 import com.example.accessingdatamysql.tag.TagService;
+import com.example.accessingdatamysql.user.UserController;
+import com.example.accessingdatamysql.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -19,11 +23,19 @@ public class NoteController {
 
     public final NoteService noteService;
     public final TagService tagService;
+    public final UserService userService;
 
     @Autowired
-    public NoteController(NoteService noteService, TagService tagService) {
+    public NoteController(NoteService noteService, TagService tagService, UserService userService) {
         this.noteService = noteService;
         this.tagService = tagService;
+        this.userService = userService;
+    }
+
+    public Integer getUserId() {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String username = ((UserDetails)principal).getUsername();
+        return userService.getId(username);
     }
 
     @GetMapping("/search")
