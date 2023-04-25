@@ -1,6 +1,7 @@
 package com.example.accessingdatamysql.tag;
 
 import com.example.accessingdatamysql.tag.DTO.*;
+import com.example.accessingdatamysql.user.UserController;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Page;
@@ -18,8 +19,18 @@ public class TagController {
 
     private final TagService tagService;
 
-    public TagController(TagService tagService) {
+    private final UserController userController;
+
+    public TagController(TagService tagService, UserController userController) {
         this.tagService = tagService;
+        this.userController = userController;
+    }
+
+    public Integer getUserId() {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String username = ((UserDetails)principal).getUsername();
+        Integer userId = userController.getId(username);
+        return userId;
     }
 
     @CrossOrigin(origins = "*")
@@ -29,11 +40,7 @@ public class TagController {
             Pageable pageable
     ) {
 
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        String username = ((UserDetails)principal).getUsername();
-
-        System.out.println("!!!!!! principal: " + username);
         return tagService.toTagResponseDTOsPage(tagService.findAll(pageable));
     }
 

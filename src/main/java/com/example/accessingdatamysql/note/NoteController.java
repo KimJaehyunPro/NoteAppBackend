@@ -9,10 +9,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.server.ResponseStatusException;
 
 @RestController
@@ -64,13 +61,11 @@ public class NoteController {
             @PathVariable
             Integer id
     ) {
-        System.out.println("!!!!!");
         return noteService.UpdateLastOpenTimestamp(id);
     }
 
     @GetMapping("/randomId")
     public Integer getRandomId() {
-        String sessionId = RequestContextHolder.currentRequestAttributes().getSessionId();
         return noteService.getRandomId();
     }
 
@@ -106,7 +101,7 @@ public class NoteController {
             @PathVariable
             Integer id
     ) {
-        Boolean isDeleted = noteService.deleteNoteById(id);
+        boolean isDeleted = noteService.deleteNoteById(id);
         if (!isDeleted) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Delete not successful");
         }

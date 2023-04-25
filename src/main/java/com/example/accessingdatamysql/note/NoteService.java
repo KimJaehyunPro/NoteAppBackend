@@ -1,13 +1,10 @@
 package com.example.accessingdatamysql.note;
 
-import ch.qos.logback.core.pattern.parser.OptionTokenizer;
 import com.example.accessingdatamysql.note.DTO.NoteRequestDTO;
 import com.example.accessingdatamysql.note.DTO.NoteResponseDTO;
 import com.example.accessingdatamysql.tag.Tag;
 import com.example.accessingdatamysql.tag.TagService;
 import com.example.accessingdatamysql.user.UserController;
-import jakarta.persistence.criteria.CriteriaBuilder;
-import org.hibernate.Hibernate;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -15,7 +12,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.swing.text.html.Option;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -34,14 +30,6 @@ public class NoteService {
         this.tagService = tagService;
         this.userController = userController;
     }
-
-    /**
-     * Searches Notes that contain 'query' in either title or content.
-     *
-     * @param query    a String, Case-insensitive
-     * @param pageable a Pageable
-     * @return Page of Notes
-     */
 
     @Transactional
     public NoteResponseDTO getNote(Integer id) {
@@ -95,7 +83,8 @@ public class NoteService {
     }
 
     public NoteResponseDTO toNoteResponseDTO(Note note) {
-        NoteResponseDTO noteResponseDTO = new NoteResponseDTO(
+
+        return new NoteResponseDTO(
                 note.getId(),
                 note.getTitle(),
                 note.getContent(),
@@ -103,8 +92,6 @@ public class NoteService {
                 note.getCreationTimestamp(),
                 note.getLastOpenTimestamp()
         );
-
-        return noteResponseDTO;
     }
 
     public Page<NoteResponseDTO> toNoteResponseDTOsPage(Page<Note> notesPage) {
@@ -139,9 +126,7 @@ public class NoteService {
         Set<Tag> tagSet = tagService.getOrCreateTags(tagList);
         newNote.setTags(tagSet);
 
-        Note createdNote = noteRepository.save(newNote);
-
-        return createdNote;
+        return noteRepository.save(newNote);
     }
 
     @Transactional
@@ -150,7 +135,7 @@ public class NoteService {
         List<Note> notes = noteRepository.findAll();
         // Get a random index from the list
         Random random = new Random();
-        Integer randomIndex = random.nextInt(notes.size());
+        int randomIndex = random.nextInt(notes.size());
 
         // Return the random index
         return notes.get(randomIndex).getId();

@@ -16,11 +16,9 @@ import java.util.*;
 public class TagService {
 
     private final TagRepository tagRepository;
-    private final NoteRepository noteRepository;
 
-    public TagService(TagRepository tagRepository, NoteRepository noteRepository) {
+    public TagService(TagRepository tagRepository) {
         this.tagRepository = tagRepository;
-        this.noteRepository = noteRepository;
     }
 
     public TagResponseDTO toTagResponseDTO(Tag tag) {
