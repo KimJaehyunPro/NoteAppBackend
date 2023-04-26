@@ -170,7 +170,7 @@ public class NoteService {
             noteRepository.delete(noteToDelete.get());
 
             for (Tag tag : tagsToCheck) {
-                Set<Note> noteSet = noteRepository.findAllByTag(tag.getName());
+                Set<Note> noteSet = noteRepository.findAllByTag(tag.getName(), authController.getUserId());
                 if (noteSet.size() == 0) {
                     tagService.deleteTagById(tag.getId());
                 }

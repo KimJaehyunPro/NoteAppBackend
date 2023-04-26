@@ -16,8 +16,8 @@ public interface NoteRepository extends JpaRepository<Note, Integer> {
             "WHERE user.id = :userId AND " +
             "(note.title LIKE %:query% OR note.content LIKE %:query%)")
     Page<Note> findAllByTitleOrContent(String query, Pageable pageable, Integer userId);
-    @Query("SELECT note FROM Note note JOIN note.tags tag WHERE tag.name = :tag")
-    Set<Note> findAllByTag(@Param("tag")String tag);
-    @Query("SELECT note FROM Note note JOIN note.tags tag WHERE tag.name = :tag")
-    Page<Note> findAllByTag(@Param("tag")String tag, Pageable pageable);
+    @Query("SELECT note FROM User user JOIN user.notes note JOIN note.tags tag WHERE user.id = :userId AND tag.name = :tagName")
+    Set<Note> findAllByTag(@Param("tagName")String tagName, Integer userId);
+    @Query("SELECT note FROM Note note JOIN note.tags tag WHERE tag.name = :tagName")
+    Page<Note> findAllByTag(@Param("tagName")String tagName, Pageable pageable);
 }
