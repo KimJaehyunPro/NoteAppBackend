@@ -1,5 +1,6 @@
 package com.example.accessingdatamysql.tag;
 
+import com.example.accessingdatamysql.authentication.AuthController;
 import com.example.accessingdatamysql.tag.DTO.*;
 import com.example.accessingdatamysql.user.UserController;
 import org.springframework.data.domain.Pageable;
@@ -21,16 +22,12 @@ public class TagController {
 
     private final UserController userController;
 
-    public TagController(TagService tagService, UserController userController) {
+    private final AuthController authController;
+
+    public TagController(TagService tagService, UserController userController, AuthController authController) {
         this.tagService = tagService;
         this.userController = userController;
-    }
-
-    public Integer getUserId() {
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        String username = ((UserDetails)principal).getUsername();
-        Integer userId = userController.getId(username);
-        return userId;
+        this.authController = authController;
     }
 
     @CrossOrigin(origins = "*")

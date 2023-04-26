@@ -1,5 +1,6 @@
 package com.example.accessingdatamysql.note;
 
+import com.example.accessingdatamysql.authentication.AuthController;
 import com.example.accessingdatamysql.note.DTO.NoteRequestDTO;
 import com.example.accessingdatamysql.note.DTO.NoteResponseDTO;
 import com.example.accessingdatamysql.tag.Tag;
@@ -24,11 +25,13 @@ public class NoteService {
     private final NoteRepository noteRepository;
     private final TagService tagService;
     private final UserController userController;
+    private final AuthController authController;
 
-    public NoteService(NoteRepository noteRepository, TagService tagService, UserController userController) {
+    public NoteService(NoteRepository noteRepository, TagService tagService, UserController userController, AuthController authController) {
         this.noteRepository = noteRepository;
         this.tagService = tagService;
         this.userController = userController;
+        this.authController = authController;
     }
 
     @Transactional
@@ -61,9 +64,7 @@ public class NoteService {
 
     public Page<Note> findNotes(String query, Pageable pageable) {
 
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        String username = ((UserDetails)principal).getUsername();
-        Integer userId = userController.getId(username);
+        Integer userId = authController.getUserId();
 
         if (query == null) {
             return findAllByUserId(pageable, userId);

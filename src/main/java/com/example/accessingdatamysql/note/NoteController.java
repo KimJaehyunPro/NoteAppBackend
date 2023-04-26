@@ -1,9 +1,11 @@
 package com.example.accessingdatamysql.note;
 
+import com.example.accessingdatamysql.authentication.AuthController;
 import com.example.accessingdatamysql.note.DTO.NoteRequestDTO;
 import com.example.accessingdatamysql.note.DTO.NoteResponseDTO;
 import com.example.accessingdatamysql.tag.TagService;
 import com.example.accessingdatamysql.user.UserController;
+import com.example.accessingdatamysql.user.UserRepository;
 import com.example.accessingdatamysql.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -25,17 +27,14 @@ public class NoteController {
     public final TagService tagService;
     public final UserService userService;
 
+    public final AuthController authController;
+
     @Autowired
-    public NoteController(NoteService noteService, TagService tagService, UserService userService) {
+    public NoteController(NoteService noteService, TagService tagService, UserService userService, AuthController authController) {
         this.noteService = noteService;
         this.tagService = tagService;
         this.userService = userService;
-    }
-
-    public Integer getUserId() {
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        String username = ((UserDetails)principal).getUsername();
-        return userService.getId(username);
+        this.authController = authController;
     }
 
     @GetMapping("/search")

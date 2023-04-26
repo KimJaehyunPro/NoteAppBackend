@@ -13,8 +13,4 @@ public class UserController {
     public UserController(UserService userService) {
         this.userService = userService;
     }
-
-    public Integer getId(String username) {
-        return userService.getId(username);
-    }
 }
