@@ -145,11 +145,10 @@ public class NoteService {
     @Transactional
     public Integer getRandomId() {
         // Get a list of all notes from repository
-        List<Note> notes = noteRepository.findAll();
+        List<Note> notes = noteRepository.findAllByUserId(authController.getUserId());
         // Get a random index from the list
         Random random = new Random();
         int randomIndex = random.nextInt(notes.size());
-
         // Return the random index
         return notes.get(randomIndex).getId();
     }

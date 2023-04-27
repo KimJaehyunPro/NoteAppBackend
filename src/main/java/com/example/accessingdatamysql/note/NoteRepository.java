@@ -5,9 +5,12 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
 import java.util.Set;
 
 public interface NoteRepository extends JpaRepository<Note, Integer> {
+    @Query("SELECT note FROM User user JOIN user.notes note WHERE user.id = :userId")
+    List<Note> findAllByUserId(Integer userId);
     @Query("SELECT note FROM User user JOIN user.notes note WHERE user.id = :userId")
     Page<Note> findAllByUserId(Pageable pageable, Integer userId);
 
