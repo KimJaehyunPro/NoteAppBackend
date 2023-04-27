@@ -5,7 +5,10 @@ import com.example.accessingdatamysql.note.DTO.NoteRequestDTO;
 import com.example.accessingdatamysql.note.DTO.NoteResponseDTO;
 import com.example.accessingdatamysql.tag.Tag;
 import com.example.accessingdatamysql.tag.TagService;
+import com.example.accessingdatamysql.user.User;
 import com.example.accessingdatamysql.user.UserController;
+import com.example.accessingdatamysql.user.UserRepository;
+import com.example.accessingdatamysql.user.UserService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -20,15 +23,17 @@ import java.util.Set;
 @Service
 public class NoteService {
 
+    private  final UserRepository userRepository;
     private final NoteRepository noteRepository;
     private final TagService tagService;
-    private final UserController userController;
+    private final UserService userService;
     private final AuthController authController;
 
-    public NoteService(NoteRepository noteRepository, TagService tagService, UserController userController, AuthController authController) {
+    public NoteService(UserRepository userRepository, NoteRepository noteRepository, TagService tagService, UserService userService, AuthController authController) {
+        this.userRepository = userRepository;
         this.noteRepository = noteRepository;
         this.tagService = tagService;
-        this.userController = userController;
+        this.userService = userService;
         this.authController = authController;
     }
 
@@ -116,6 +121,13 @@ public class NoteService {
 
     @Transactional
     public Note createNote(String title, String content, List<String> tagList) {
+        Integer authorUserId = authController.getUserId();
+        User user = userService.getUserById(authorUserId);
+
+        boolean userNotExists = (user == null);
+        if (userNotExists) {
+            return null;
+        }
 
         Note newNote = new Note();
         newNote.setTitle(title);
@@ -125,7 +137,7 @@ public class NoteService {
         Set<Tag> tagSet = tagService.getOrCreateTags(tagList);
         newNote.setTags(tagSet);
 
-        Integer authorUserId = authController.getUserId();
+        user.getNotes().add(newNote);
 
         return noteRepository.save(newNote);
     }
