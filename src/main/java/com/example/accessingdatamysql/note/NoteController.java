@@ -4,8 +4,6 @@ import com.example.accessingdatamysql.authentication.AuthController;
 import com.example.accessingdatamysql.note.DTO.NoteRequestDTO;
 import com.example.accessingdatamysql.note.DTO.NoteResponseDTO;
 import com.example.accessingdatamysql.tag.TagService;
-import com.example.accessingdatamysql.user.UserController;
-import com.example.accessingdatamysql.user.UserRepository;
 import com.example.accessingdatamysql.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -13,8 +11,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -27,14 +23,11 @@ public class NoteController {
     public final TagService tagService;
     public final UserService userService;
 
-    public final AuthController authController;
-
     @Autowired
-    public NoteController(NoteService noteService, TagService tagService, UserService userService, AuthController authController) {
+    public NoteController(NoteService noteService, TagService tagService, UserService userService) {
         this.noteService = noteService;
         this.tagService = tagService;
         this.userService = userService;
-        this.authController = authController;
     }
 
     @GetMapping("/search")
@@ -85,14 +78,11 @@ public class NoteController {
             @RequestBody
             NoteRequestDTO noteRequestDTO
     ) {
-
-        Note createdNote = noteService.createNote(
+        return noteService.toNoteResponseDTO(noteService.createNote(
                 noteRequestDTO.getTitle(),
                 noteRequestDTO.getContent(),
                 tagService.toStringList(noteRequestDTO.getTags())
-        );
-
-        return noteService.toNoteResponseDTO(createdNote);
+        ));
     }
 
     @PutMapping("/{id}")

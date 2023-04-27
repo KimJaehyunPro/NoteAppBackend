@@ -8,6 +8,13 @@ public class UserResponseDTO {
     private Integer id;
     private String username;
     private List<Role> roles;
+
+    public UserResponseDTO(Integer id, String username, List<Role> roles) {
+        this.id = id;
+        this.username = username;
+        this.roles = roles;
+    }
+
     public Integer getId() {
         return id;
     }

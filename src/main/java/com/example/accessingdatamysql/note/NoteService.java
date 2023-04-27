@@ -8,8 +8,6 @@ import com.example.accessingdatamysql.tag.TagService;
 import com.example.accessingdatamysql.user.UserController;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -126,6 +124,8 @@ public class NoteService {
         // Get all the tags
         Set<Tag> tagSet = tagService.getOrCreateTags(tagList);
         newNote.setTags(tagSet);
+
+        Integer authorUserId = authController.getUserId();
 
         return noteRepository.save(newNote);
     }
