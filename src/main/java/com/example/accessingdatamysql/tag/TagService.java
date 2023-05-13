@@ -1,7 +1,6 @@
 package com.example.accessingdatamysql.tag;
 
 import com.example.accessingdatamysql.note.Note;
-import com.example.accessingdatamysql.note.NoteRepository;
 import com.example.accessingdatamysql.tag.DTO.TagRequestDTO;
 import com.example.accessingdatamysql.tag.DTO.TagResponseDTO;
 import org.springframework.data.domain.Page;
