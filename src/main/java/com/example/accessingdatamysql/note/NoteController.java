@@ -1,6 +1,5 @@
 package com.example.accessingdatamysql.note;
 
-import com.example.accessingdatamysql.authentication.AuthController;
 import com.example.accessingdatamysql.note.DTO.NoteRequestDTO;
 import com.example.accessingdatamysql.note.DTO.NoteResponseDTO;
 import com.example.accessingdatamysql.tag.TagService;

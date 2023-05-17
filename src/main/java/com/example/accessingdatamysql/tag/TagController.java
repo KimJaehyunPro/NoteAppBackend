@@ -34,8 +34,6 @@ public class TagController {
             @PageableDefault(page = 0, size = 5, sort = "lastOpenTimestamp", direction = Sort.Direction.DESC)
             Pageable pageable
     ) {
-
-
         return tagService.toTagResponseDTOsPage(tagService.findAll(pageable));
     }
 

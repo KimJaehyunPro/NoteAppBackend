@@ -1,5 +1,6 @@
 package com.example.accessingdatamysql.tag;
 
+import com.example.accessingdatamysql.authentication.AuthController;
 import com.example.accessingdatamysql.note.Note;
 import com.example.accessingdatamysql.tag.DTO.TagRequestDTO;
 import com.example.accessingdatamysql.tag.DTO.TagResponseDTO;
@@ -14,10 +15,12 @@ import java.util.*;
 @Service
 public class TagService {
 
+    private final AuthController authController;
     private final TagRepository tagRepository;
 
-    public TagService(TagRepository tagRepository) {
+    public TagService(TagRepository tagRepository, AuthController authController) {
         this.tagRepository = tagRepository;
+        this.authController = authController;
     }
 
     public TagResponseDTO toTagResponseDTO(Tag tag) {
@@ -33,6 +36,7 @@ public class TagService {
     }
 
     public Page<Tag> findAll(Pageable pageable) {
+
         return tagRepository.findAll(pageable);
     }
 
