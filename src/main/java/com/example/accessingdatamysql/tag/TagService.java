@@ -36,8 +36,8 @@ public class TagService {
     }
 
     public Page<Tag> findAll(Pageable pageable) {
-
-        return tagRepository.findAll(pageable);
+        Integer userId = authController.getUserId();
+        return tagRepository.findAll(pageable, userId);
     }
 
     public Tag updateLastOpenTimestamp (Tag tag) {
