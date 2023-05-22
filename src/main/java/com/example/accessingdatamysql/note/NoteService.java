@@ -116,7 +116,9 @@ public class NoteService {
             tagService.updateLastOpenTimestamp(tag);
         }
 
-        return noteRepository.findAllByTag(query, pageable);
+        Integer userId = authController.getUserId();
+
+        return noteRepository.findAllByTag(query, pageable, userId);
     }
 
     @Transactional

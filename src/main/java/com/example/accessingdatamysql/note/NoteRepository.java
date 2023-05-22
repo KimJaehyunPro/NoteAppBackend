@@ -22,5 +22,5 @@ public interface NoteRepository extends JpaRepository<Note, Integer> {
     @Query("SELECT note FROM User user JOIN user.notes note JOIN note.tags tag WHERE user.id = :userId AND tag.name = :tagName")
     Set<Note> findAllByTag(@Param("tagName")String tagName, Integer userId);
     @Query("SELECT note FROM User user JOIN user.notes note JOIN note.tags tag WHERE user.id = :userId AND tag.name = :tagName")
-    Page<Note> findAllByTag(@Param("tagName")String tagName, Pageable pageable);
+    Page<Note> findAllByTag(@Param("tagName")String tagName, Pageable pageable, Integer userId);
 }
