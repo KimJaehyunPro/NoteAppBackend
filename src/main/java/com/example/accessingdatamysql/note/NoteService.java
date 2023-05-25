@@ -161,10 +161,20 @@ public class NoteService {
             return null;
         }
 
+        Integer userId = authController.getUserId();
+
         Note originalNote = noteOptional.get();
 
         originalNote.setTitle(noteRequestDTO.getTitle());
         originalNote.setContent(noteRequestDTO.getContent());
+
+        Set<Tag> previousTags = tagService.findAllByNoteId(id);
+        for (Tag tag : previousTags) {
+            boolean noMoreNotes = (noteRepository.findAllByTag(tag.getName(), userId).size() <= 1);
+            if (noMoreNotes) {
+                tagService.deleteTagById(tag.getId());
+            }
+        }
 
         List<String> tagsToGetOrCreate = tagService.toStringList(noteRequestDTO.getTags());
         Set<Tag> newTags = tagService.getOrCreateTags(tagsToGetOrCreate);

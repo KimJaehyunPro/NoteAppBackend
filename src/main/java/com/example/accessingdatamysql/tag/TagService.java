@@ -40,6 +40,10 @@ public class TagService {
         return tagRepository.findAll(pageable, userId);
     }
 
+    public Set<Tag> findAllByNoteId(Integer noteId) {
+        return tagRepository.findAllByNoteId(noteId);
+    }
+
     public Tag updateLastOpenTimestamp (Tag tag) {
         tag.setLastOpenTimestamp(LocalDateTime.now());
         return tagRepository.save(tag);

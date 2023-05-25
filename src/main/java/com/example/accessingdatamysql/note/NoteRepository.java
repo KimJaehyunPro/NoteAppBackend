@@ -13,7 +13,6 @@ public interface NoteRepository extends JpaRepository<Note, Integer> {
     List<Note> findAllByUserId(Integer userId);
     @Query("SELECT note FROM User user JOIN user.notes note WHERE user.id = :userId")
     Page<Note> findAllByUserId(Pageable pageable, Integer userId);
-
     @Query("SELECT note FROM User user " +
             "JOIN user.notes note " +
             "WHERE user.id = :userId AND " +
