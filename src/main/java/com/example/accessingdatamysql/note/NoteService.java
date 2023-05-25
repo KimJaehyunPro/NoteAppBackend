@@ -6,7 +6,6 @@ import com.example.accessingdatamysql.note.DTO.NoteResponseDTO;
 import com.example.accessingdatamysql.tag.Tag;
 import com.example.accessingdatamysql.tag.TagService;
 import com.example.accessingdatamysql.user.User;
-import com.example.accessingdatamysql.user.UserController;
 import com.example.accessingdatamysql.user.UserRepository;
 import com.example.accessingdatamysql.user.UserService;
 import org.springframework.data.domain.Page;
@@ -176,18 +175,35 @@ public class NoteService {
 
     @Transactional
     public boolean deleteNoteById(Integer id) {
-        Optional<Note> noteToDelete = noteRepository.findById(id);
+        Optional<Note> noteToDeleteOptional = noteRepository.findById(id);
 
-        if (noteToDelete.isPresent()) {
-            Set<Tag> tagsToCheck = noteToDelete.get().getTags();
-            noteRepository.delete(noteToDelete.get());
+        if (noteToDeleteOptional.isPresent()) {
+            Integer userId = authController.getUserId();
 
+            List<Note> usersNotes = noteRepository.findAllByUserId(userId);
+            Note noteToDelete = noteToDeleteOptional.get();
+
+            // If this user is not the author, do not delete
+            if (!usersNotes.contains(noteToDelete)) {
+                return false;
+            }
+
+            // Delete the note's tags
+            Set<Tag> tagsToCheck = noteToDelete.getTags();
             for (Tag tag : tagsToCheck) {
-                Set<Note> noteSet = noteRepository.findAllByTag(tag.getName(), authController.getUserId());
+                Set<Note> noteSet = noteRepository.findAllByTag(tag.getName(), userId);
                 if (noteSet.size() == 0) {
                     tagService.deleteTagById(tag.getId());
                 }
             }
+
+            // Delete the user's notes ??
+            usersNotes.remove(noteToDelete);
+            User user = userService.getUserById(userId);
+            user.setNotes(usersNotes);
+
+            // Delete the note
+            noteRepository.delete(noteToDelete);
 
             return true;
         }
